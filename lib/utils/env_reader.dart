@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 /// A simple environment variable reader that reads from .env file
@@ -35,7 +36,7 @@ class EnvReader {
       }
       _initialized = true;
     } catch (e) {
-      print('Error reading .env file: $e');
+      log('Error reading .env file: $e');
     }
   }
 
