@@ -1,14 +1,14 @@
 name: luckeverydaybot
-description: A sample command-line application.
+description: A simple telegram bot for placing casino like bets.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
 
 environment:
   sdk: ^3.7.2
 
-# Add regular dependencies here.
 dependencies:
-  # path: ^1.8.0
+  cron: ^0.6.1
+  supabase: ^2.6.3
+  televerse: ^2.4.4
 
 dev_dependencies:
   lints: ^5.0.0
