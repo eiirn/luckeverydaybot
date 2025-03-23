@@ -10,6 +10,7 @@ final adminIds = EnvReader.getIntList('BOT_ADMIN_IDS');
 // Initialize bot
 final api = RawAPI(token);
 final bot = Bot.fromAPI(api);
+final conv = Conversation(bot);
 
 // Supabase configurations
 final supabaseUrl = EnvReader.getRequired('SUPABASE_URL');
