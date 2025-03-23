@@ -65,7 +65,7 @@ class UserMethods {
       return BotUser.fromJson(response);
     } catch (e, stack) {
       log('Error while getting user info.', error: e, stackTrace: stack);
-      rethrow;
+      return null;
     }
   }
 
