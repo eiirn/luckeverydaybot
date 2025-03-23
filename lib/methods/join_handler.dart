@@ -136,8 +136,7 @@ Future<void> joinHandler(Context ctx) async {
   );
 
   // Generate a unique payload for this transaction
-  final transactionPayload =
-      'draw-bet-${user.userId}-${DateTime.now().millisecondsSinceEpoch}';
+  const transactionPayload = 'draw-bet';
 
   // Send the invoice
   await ctx.sendInvoice(

@@ -33,12 +33,6 @@ Future<void> todayHandler(Context ctx) async {
     final userEntry = await poolMethods.getUserTodayPoolEntry(user.userId);
     final userContribution = userEntry?.amount ?? 0;
 
-    // Calculate user's current winning chance if they've participated
-    final winChance =
-        participantCount > 0 && userContribution > 0
-            ? (userContribution / totalPool * 100).toStringAsFixed(1)
-            : '0.0';
-
     // Build the message
     final messageBuilder = StringBuffer();
 
@@ -102,7 +96,6 @@ Future<void> todayHandler(Context ctx) async {
         messageBuilder.writeln(
           '✨ *Your contribution: ${userContribution.toString()} stars*',
         );
-        messageBuilder.writeln('🎯 *Your winning chance: $winChance%*\n');
 
         // Encourage them to increase their odds
         messageBuilder.writeln(
@@ -124,6 +117,15 @@ Future<void> todayHandler(Context ctx) async {
       caption: messageBuilder.toString(),
       parseMode: ParseMode.markdown,
     );
+    if (userContribution > 0 && !user.hasJoinedChannel) {
+      await ctx.reply(
+        'Tip: Join our communities to increase your winning chance even higher.',
+        replyMarkup: InlineKeyboard()
+            .addUrl('Join Channel', 'https://t.me/luckystareveryday')
+            .row()
+            .addUrl('Join Chat', 'https://t.me/+oN3UYRdvhHU5MGVh'),
+      );
+    }
   } catch (error, stack) {
     await ctx.reply(
       'Sorry, there was an issue retrieving today\'s draw information.'

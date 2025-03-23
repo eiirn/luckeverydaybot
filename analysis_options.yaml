@@ -100,7 +100,7 @@ linter:
     leading_newlines_in_multiline_strings: true
     library_names: true
     library_prefixes: true
-    lines_longer_than_80_chars: true
+    lines_longer_than_80_chars: false
     missing_whitespace_between_adjacent_strings: true
     no_default_cases: true
     no_leading_underscores_for_library_prefixes: true
