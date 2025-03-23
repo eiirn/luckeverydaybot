@@ -18,6 +18,10 @@ Future<void> todayHandler(Context ctx) async {
   final poolMethods = PoolMethods(supabase);
 
   try {
+    await ctx.replyWithChatAction(ChatAction.typing);
+  } finally {}
+
+  try {
     // Get today's pool stats
     final totalPool = await poolMethods.getTodayPoolTotal();
     final participantCount = await poolMethods.getTodayUniqueUserCount();
