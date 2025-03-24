@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:televerse/telegram.dart';
 import 'package:televerse/televerse.dart';
 import '../database/pool_methods.dart';
@@ -76,8 +78,13 @@ Future<void> _processDailyDrawPayment(
   SuccessfulPayment payment,
 ) async {
   try {
-    // Acknowledge receipt immediately
-    await ctx.react('🏆');
+    try {
+      // Acknowledge receipt immediately
+      await ctx.react('🏆');
+      log('Reacted to the message');
+    } catch (err, stack) {
+      log('Error while reacting!', error: err, stackTrace: stack);
+    }
 
     // Add to the pool
     final poolMethods = PoolMethods(supabase);
@@ -107,7 +114,8 @@ Future<void> _processDailyDrawPayment(
       'The more stars you contribute, the higher your chances of winning! Use /join to place another bet or /today to see today\'s pool.',
       parseMode: ParseMode.markdown,
     );
-  } catch (e) {
+  } catch (e, stack) {
+    log('Error in payment handler.', error: e, stackTrace: stack);
     await ctx.reply(
       '⚠️ There was an issue adding your stars to today\'s draw. Don\'t worry, your payment is safe!\n\n'
       'Our team has been notified. You can try again or contact support if needed.',

@@ -1,5 +1,6 @@
 import 'package:supabase/supabase.dart';
 
+import '../luckeverydaybot.dart';
 import '../models/pool_entry.dart';
 
 /// A class that provides methods for interacting with pool entries in the
@@ -41,6 +42,22 @@ class PoolMethods {
             .eq('user_id', userId)
             .eq('date', date)
             .maybeSingle();
+
+    // First, call the RPC function to get the updated value
+    final rpcResponse = await _supabase.rpc(
+      'increment_field',
+      params: {
+        'column_name': 'total_spends',
+        'increment_by': amount,
+        'user_id': userId,
+      },
+    );
+
+    // Then update the users table with the new value
+    await _supabase
+        .from('users')
+        .update({'total_spends': rpcResponse})
+        .eq('user_id', userId);
 
     if (response != null) {
       // Update existing entry
