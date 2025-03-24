@@ -1,6 +1,7 @@
 import 'package:televerse/televerse.dart';
 
 import '../database/user_methods.dart';
+import '../language/en.dart';
 import '../luckeverydaybot.dart';
 
 class UserGetter implements Middleware {
@@ -9,10 +10,7 @@ class UserGetter implements Middleware {
     final from = ctx.from?.id;
 
     if (from == null) {
-      await ctx.reply(
-        'Please use me in private chats or please do not use me as'
-        ' anonymous admin.',
-      );
+      await ctx.reply(en.noFrom);
       return;
     }
 

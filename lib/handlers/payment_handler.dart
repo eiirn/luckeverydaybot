@@ -2,9 +2,12 @@ import 'dart:developer';
 
 import 'package:televerse/telegram.dart';
 import 'package:televerse/televerse.dart';
+import '../consts/strings.dart';
 import '../database/pool_methods.dart';
 import '../database/transaction_methods.dart';
+import '../database/user_methods.dart';
 import '../extensions/user_ext.dart';
+import '../language/en.dart';
 import '../luckeverydaybot.dart';
 import '../models/transaction.dart';
 import '../models/user.dart';
@@ -22,10 +25,7 @@ Future<void> paymentHandler(Context ctx) async {
     return;
   }
 
-  final userId = ctx.from?.id ?? 0;
-  if (userId == 0) {
-    return;
-  }
+  final userId = ctx.from!.id;
 
   // Create transaction record
   final transaction = Transaction(
@@ -40,34 +40,28 @@ Future<void> paymentHandler(Context ctx) async {
   try {
     await TransactionMethods(supabase).addTransaction(transaction);
   } catch (e) {
-    await ctx.reply(
-      '⚠️ There was an issue processing your payment. Our team has been notified. Please contact support with ID: ${transaction.transactionId}',
-    );
+    await ctx.reply(en.errorRegisteringTransaction(transaction.transactionId));
     return;
   }
 
   // Get user information
-  final BotUser? user = ctx.user;
+  final String username = (ctx.from?.firstName ?? 'Winner!').trim();
+  BotUser? user = ctx.user;
   if (user == null) {
-    await ctx.reply(
-      '⚠️ Your payment was received, but your account is not properly set up.\n\n'
-      'Please use /start to create your account first, then send /refund to request a refund for this transaction.',
-    );
-    return;
+    log('Creating user account!');
+    user = await UserMethods(
+      supabase,
+    ).createUser(userId: ctx.from!.id, name: username);
+    log('User created ${user.userId}!');
   }
 
   // Process based on payment payload
   final payload = successfulPayment.invoicePayload;
 
-  if (payload == 'draw-bet') {
+  if (payload == PayloadData.betPaylod) {
     await _processDailyDrawPayment(ctx, user, successfulPayment);
   } else {
-    // Unknown payload type
-
-    await ctx.reply(
-      '✅ Your payment of ${successfulPayment.totalAmount} stars has been recorded, but I\'m not sure what it was for.\n\n'
-      'If this was a mistake, please use /refund to request assistance.',
-    );
+    await ctx.reply(user.lang.unknownPayment(transaction.amount));
   }
 }
 
@@ -106,21 +100,23 @@ Future<void> _processDailyDrawPayment(
     // Format time remaining
     final hoursRemaining = remaining.inHours;
     final minutesRemaining = remaining.inMinutes % 60;
-    final timeString = '$hoursRemaining hours and $minutesRemaining minutes';
+    final timeString = user.lang.durationTimeString(
+      hoursRemaining,
+      minutesRemaining,
+    );
 
     // Respond with confirmation and stats
     await ctx.reply(
-      '🎯 *Great bet!* You\'ve added ${payment.totalAmount} stars to today,\'s draw!\n\n'
-      '💰 Your total contribution today: *${entry.amount} stars* (${entry.transactionIds.length} transactions)\n'
-      '⏱ Next draw in: *$timeString*\n\n'
-      'The more stars you contribute, the higher your chances of winning! Use /join to place another bet or /today to see today\'s pool.',
+      user.lang.betConfirmation(
+        payment.totalAmount,
+        entry.amount,
+        entry.transactionIds.length,
+        timeString,
+      ),
       parseMode: ParseMode.markdown,
     );
   } catch (e, stack) {
     log('Error in payment handler.', error: e, stackTrace: stack);
-    await ctx.reply(
-      '⚠️ There was an issue adding your stars to today\'s draw. Don\'t worry, your payment is safe!\n\n'
-      'Our team has been notified. You can try again or contact support if needed.',
-    );
+    await ctx.reply(user.lang.paymentError);
   }
 }

@@ -1,9 +1,10 @@
+import 'package:luckeverydaybot/consts/strings.dart';
+import 'package:luckeverydaybot/handlers/accept_precheck.dart';
+import 'package:luckeverydaybot/handlers/join_handler.dart';
+import 'package:luckeverydaybot/handlers/payment_handler.dart';
+import 'package:luckeverydaybot/handlers/start_handler.dart';
+import 'package:luckeverydaybot/handlers/today_handler.dart';
 import 'package:luckeverydaybot/luckeverydaybot.dart';
-import 'package:luckeverydaybot/methods/accept_precheck.dart';
-import 'package:luckeverydaybot/methods/join_handler.dart';
-import 'package:luckeverydaybot/methods/payment_handler.dart';
-import 'package:luckeverydaybot/methods/start_handler.dart';
-import 'package:luckeverydaybot/methods/today_handler.dart';
 import 'package:luckeverydaybot/middlewares/user_getter.dart';
 import 'package:luckeverydaybot/scheduled/task.dart';
 import 'package:luckeverydaybot/utils/env_reader.dart';
@@ -25,5 +26,7 @@ void main(List<String> args) async {
   bot.command('join', joinHandler);
   bot.onPreCheckoutQuery(acceptPrecheckout);
   bot.onSuccessfulPayment(paymentHandler);
+  bot.callbackQuery(CallbackQueryData.getStarted, todayHandler);
+
   await bot.start();
 }

@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:televerse/televerse.dart';
 
+import '../consts/strings.dart';
 import '../database/user_methods.dart';
 import '../extensions/user_ext.dart';
 import '../luckeverydaybot.dart';
-import '../utils/welcome.dart';
 
 Future<void> startHandler(Context ctx) async {
   final welcomeImage = InputFile.fromFile(File('assets/welcome.webp'));
@@ -15,28 +15,27 @@ Future<void> startHandler(Context ctx) async {
   }
 
   // Get the username safely
-  final String username = (ctx.from?.firstName ?? 'there').trim();
+  final String username = (ctx.from?.firstName ?? 'Winner!').trim();
   var user = ctx.user;
-  if (user != null) {
-    log('We have a user here');
-  } else {
+  if (user == null) {
+    log('Creating user...');
     user = await UserMethods(
       supabase,
     ).createUser(userId: ctx.from!.id, name: username, referralId: referredBy);
-    log('User created');
+    log('User created ${user.userId}!');
   }
 
   // Define inline keyboard only once
   final board = InlineKeyboard()
-      .add('Get Started', 'get-started')
+      .add(user.lang.getStarted, CallbackQueryData.getStarted)
       .row()
-      .add('Help', 'help');
+      .add(user.lang.help, CallbackQueryData.help);
 
   try {
     // Attempt to send the message with username
     await ctx.replyWithPhoto(
       welcomeImage,
-      caption: generateWelcomeMessage(username),
+      caption: user.lang.welcomeMessage(username),
       parseMode: ParseMode.html,
       replyMarkup: board,
     );
@@ -44,7 +43,7 @@ Future<void> startHandler(Context ctx) async {
     // Fallback without username if an error occurs
     await ctx.replyWithPhoto(
       welcomeImage,
-      caption: generateWelcomeMessage(),
+      caption: user.lang.welcomeMessage(),
       parseMode: ParseMode.html,
       replyMarkup: board,
     );

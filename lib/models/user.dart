@@ -1,4 +1,8 @@
+import '../language/language.dart';
+
+/// Represents the Bot's user
 class BotUser {
+  /// Constructs the Bot user class with the values.
   BotUser({
     required this.userId,
     required this.name,
@@ -12,9 +16,11 @@ class BotUser {
     DateTime? createdDate,
     this.isVip = false,
     this.vipDate,
+    this.langCode = 'en',
+    this.balance = 0,
   }) : createdDate = createdDate ?? DateTime.now().toUtc();
 
-  // Create a User instance from a JSON map (for when fetching from Supabase)
+  /// Create a User instance from a JSON map (for when fetching from Supabase)
   factory BotUser.fromJson(Map<String, dynamic> json) => BotUser(
     userId: json['user_id'] as int,
     name: json['name'] as String,
@@ -34,7 +40,10 @@ class BotUser {
         json['vip_date'] != null
             ? DateTime.parse(json['vip_date'] as String)
             : null,
+    langCode: json['lang_code'] as String? ?? 'en',
+    balance: json['balance'] as int,
   );
+
   final int userId;
   final String name;
   bool banned;
@@ -47,8 +56,10 @@ class BotUser {
   DateTime createdDate;
   bool isVip;
   DateTime? vipDate;
+  String langCode;
+  final int balance;
 
-  // Convert User instance to a JSON map (for when storing in Supabase)
+  /// Convert User instance to a JSON map (for when storing in Supabase)
   Map<String, dynamic> toJson() => {
     'user_id': userId,
     'name': name,
@@ -62,9 +73,11 @@ class BotUser {
     'created_date': createdDate.toIso8601String(),
     'is_vip': isVip,
     'vip_date': vipDate?.toIso8601String(),
+    'lang_code': langCode,
+    'balance': balance,
   };
 
-  // Copy with method for creating a new instance with updated fields
+  /// Copy with method for creating a new instance with updated fields
   BotUser copyWith({
     int? userId,
     String? name,
@@ -78,6 +91,8 @@ class BotUser {
     DateTime? createdDate,
     bool? isVip,
     DateTime? vipDate,
+    String? langCode,
+    int? balance,
   }) => BotUser(
     userId: userId ?? this.userId,
     name: name ?? this.name,
@@ -91,5 +106,10 @@ class BotUser {
     createdDate: createdDate ?? this.createdDate,
     isVip: isVip ?? this.isVip,
     vipDate: vipDate ?? this.vipDate,
+    langCode: langCode ?? this.langCode,
+    balance: balance ?? this.balance,
   );
+
+  /// Get the user's language pack.
+  Language get lang => Language.of(langCode);
 }

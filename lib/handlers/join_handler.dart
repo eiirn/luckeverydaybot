@@ -1,8 +1,10 @@
 import 'package:televerse/telegram.dart';
 import 'package:televerse/televerse.dart';
 
+import '../consts/strings.dart';
 import '../database/pool_methods.dart';
 import '../extensions/user_ext.dart';
+import '../language/en.dart';
 import '../luckeverydaybot.dart';
 import '../models/user.dart';
 import '../utils/formatting.dart';
@@ -13,9 +15,7 @@ Future<void> joinHandler(Context ctx) async {
 
   // Check if user has an account
   if (user == null) {
-    await ctx.reply(
-      '🚫 You need an account to join the lucky draw! Send /start to create one.',
-    );
+    await ctx.reply(en.noAccount);
     return;
   }
 
@@ -26,18 +26,13 @@ Future<void> joinHandler(Context ctx) async {
           .row()
           .texts(['500', '1000', '2000'])
           .row()
-          .text('Custom Amount 💫')
+          .text(user.lang.customAmount)
           .oneTime()
           .resized();
 
   // Send exciting prompt message
   await ctx.reply(
-    '✨ *DAILY LUCKY DRAW* ✨\n\n'
-    'How many stars would you like to bet today? More stars = higher '
-    ' chance to win!\n\n'
-    '💰 *Minimum:* 20 Stars\n'
-    '💰 *Maximum:* 2500 Stars\n\n'
-    'Today\'s pot is growing! Will you be the lucky winner?',
+    user.lang.joinInfo,
     parseMode: ParseMode.markdown,
     replyMarkup: keyboard,
   );
@@ -51,32 +46,27 @@ Future<void> joinHandler(Context ctx) async {
   // Handle conversation timeout
   if (response is ConversationFailure) {
     if (response.state == ConversationState.timedOut) {
-      await ctx.reply(
-        '⏱️ Time\'s up! The lucky draw waits for no one.\n'
-        'Send /join again when you\'re ready to try your luck!',
-      );
+      await ctx.reply(user.lang.joinTimedOut);
       return;
     }
 
     // Handle other failure states
-    await ctx.reply('Something went wrong. Please try again later.');
+    await ctx.reply(user.lang.somethingWentWrong);
     return;
   }
 
   // Ensure we have valid conversation data
   if (response is! ConversationSuccess<Context>) {
-    await ctx.reply(
-      '🔄 Oops! Something unexpected happened. Please try again.',
-    );
+    await ctx.reply(user.lang.somethingUnexpectedHappened);
     return;
   }
 
   var responseText = response.data.msg!.text!;
 
   // Handle custom amount option
-  if (responseText == 'Custom Amount 💫') {
+  if (responseText == user.lang.customAmount) {
     await ctx.reply(
-      '💫 Enter your custom star amount (20-2500):',
+      user.lang.customAmountPrompt,
       parseMode: ParseMode.markdown,
     );
 
@@ -88,12 +78,12 @@ Future<void> joinHandler(Context ctx) async {
 
     // Handle timeout for custom amount
     if (customResponse is ConversationFailure) {
-      await ctx.reply('⏱️ Time\'s up! Send /join again when you\'re ready!');
+      await ctx.reply(user.lang.timeoutStringTwo);
       return;
     }
 
     if (customResponse is! ConversationSuccess<Context>) {
-      await ctx.reply('🔄 Something went wrong. Please try again.');
+      await ctx.reply(user.lang.somethingWentWrong);
       return;
     }
 
@@ -104,17 +94,12 @@ Future<void> joinHandler(Context ctx) async {
   final starCount = int.tryParse(responseText);
 
   if (starCount == null) {
-    await ctx.reply(
-      '❌ That doesn\'t look like a number! Please send /join again and enter a valid amount.',
-    );
+    await ctx.reply(user.lang.nan);
     return;
   }
 
   if (starCount < 20 || starCount > 2500) {
-    await ctx.reply(
-      '❌ Your bet must be between 20 and 2500 stars!\n'
-      'Send /join again to place a valid bet.',
-    );
+    await ctx.reply(user.lang.betweenTwentyAnd2500);
     return;
   }
 
@@ -126,26 +111,16 @@ Future<void> joinHandler(Context ctx) async {
 
   // Send exciting confirmation and invoice
   await ctx.reply(
-    '🌟 *EXCITING NEWS!* 🌟\n\n'
-    'You\'re about to join today\'s lucky draw with '
-    '*${formatStarAmount(starCount)} stars*!\n\n'
-    'The pot is currently at *$potDisplay stars* and growing! 💰\n\n'
-    'Complete the star transaction now to secure your chance at winning '
-    'the JACKPOT! 🎰',
+    user.lang.excitingNews(starCount, potDisplay),
     parseMode: ParseMode.markdown,
   );
 
-  // Generate a unique payload for this transaction
-  const transactionPayload = 'draw-bet';
-
   // Send the invoice
   await ctx.sendInvoice(
-    title: '🎲 Lucky Draw Entry',
-    description:
-        'Place ${formatStarAmount(starCount)} stars in today\'s lucky draw '
-        'for a chance to win big!',
-    payload: transactionPayload,
-    currency: 'XTR',
-    prices: [LabeledPrice(label: 'Lucky Draw Entry', amount: starCount)],
+    title: user.lang.invoiceTitle,
+    description: user.lang.invoiceDescription(starCount),
+    payload: PayloadData.betPaylod,
+    currency: CommonData.currency,
+    prices: [LabeledPrice(label: user.lang.invoiceLabel, amount: starCount)],
   );
 }
