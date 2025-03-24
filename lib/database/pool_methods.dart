@@ -2,6 +2,7 @@ import 'package:supabase/supabase.dart';
 
 import '../luckeverydaybot.dart';
 import '../models/pool_entry.dart';
+import '../utils/formatting.dart';
 
 /// A class that provides methods for interacting with pool entries in the
 /// database.
@@ -11,14 +12,6 @@ class PoolMethods {
   /// [supabase] is the Supabase client to use for database operations.
   PoolMethods(this._supabase);
   final SupabaseClient _supabase;
-
-  /// Gets the current date in "DD-MM-YYYY" format.
-  String _getCurrentDate() {
-    final now = DateTime.now().toUtc();
-    return '${now.day.toString().padLeft(2, '0')}-'
-        '${now.month.toString().padLeft(2, '0')}-'
-        '${now.year}';
-  }
 
   /// Creates a new pool entry or updates an existing one.
   ///
@@ -32,7 +25,7 @@ class PoolMethods {
     int amount,
     String transactionId,
   ) async {
-    final date = _getCurrentDate();
+    final date = getCurrentDate();
 
     // Check if an entry already exists for this user and date
     final response =
@@ -94,7 +87,7 @@ class PoolMethods {
   ///
   /// Returns a list of all pool entries for the current date.
   Future<List<PoolEntry>> getTodayEntries() async {
-    final date = _getCurrentDate();
+    final date = getCurrentDate();
 
     final response = await _supabase
         .from('pool')
@@ -120,7 +113,7 @@ class PoolMethods {
   ///
   /// Returns the number of distinct users who have placed bets today.
   Future<int> getTodayUniqueUserCount() async {
-    final date = _getCurrentDate();
+    final date = getCurrentDate();
 
     final response =
         await _supabase.from('pool').select('user_id').eq('date', date).count();
@@ -133,7 +126,7 @@ class PoolMethods {
   ///
   /// Returns the updated pool entry for the winner.
   Future<PoolEntry?> markWinner(int userId) async {
-    final date = _getCurrentDate();
+    final date = getCurrentDate();
 
     // Check if the user has an entry for today
     final response =
@@ -158,30 +151,6 @@ class PoolMethods {
           .eq('date', date);
 
       return updatedEntry;
-    }
-
-    return null;
-  }
-
-  /// Retrieves a user's pool entry for today.
-  ///
-  /// [userId] is the ID of the user whose pool entry we want to retrieve.
-  ///
-  /// Returns the PoolEntry object for the user for today,
-  /// or null if they haven't participated.
-  Future<PoolEntry?> getUserTodayPoolEntry(int userId) async {
-    final date = _getCurrentDate();
-
-    final response =
-        await _supabase
-            .from('pool')
-            .select()
-            .eq('date', date)
-            .eq('user_id', userId)
-            .maybeSingle();
-
-    if (response != null) {
-      return PoolEntry.fromJson(response);
     }
 
     return null;

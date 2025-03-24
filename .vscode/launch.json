@@ -8,6 +8,13 @@
             "name": "luckeverydaybot",
             "request": "launch",
             "type": "dart"
+        },
+        {
+            "name": "Luck Everyday - Select Winner",
+            "request": "launch",
+            "type": "dart",
+            "program": "bin/luckeverydaybot.dart",
+            "args": ["--select-winner"]
         }
     ]
 }

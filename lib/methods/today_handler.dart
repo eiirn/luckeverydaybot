@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:televerse/televerse.dart';
 import '../database/pool_methods.dart';
+import '../extensions/single_where_or_null.dart';
 import '../extensions/user_ext.dart';
 import '../luckeverydaybot.dart';
 import '../models/user.dart';
@@ -23,15 +24,21 @@ Future<void> todayHandler(Context ctx) async {
 
   try {
     // Get today's pool stats
-    final totalPool = await poolMethods.getTodayPoolTotal();
+    final entries = await poolMethods.getTodayEntries();
+    final totalPool = entries.fold(0, (sum, entry) => sum + entry.amount);
+
+    log("We got today's pool.");
     final participantCount = await poolMethods.getTodayUniqueUserCount();
+    log("We now have today's number of users.");
 
     // Calculate prize after commission (assuming 10% fee)
     final prizeAmount = (totalPool * 0.9).toInt();
+    log('💰 Prize Amount is $prizeAmount');
 
     // Check if this user has already participated today
-    final userEntry = await poolMethods.getUserTodayPoolEntry(user.userId);
+    final userEntry = entries.singleWhereOrNull((e) => e.userId == user.userId);
     final userContribution = userEntry?.amount ?? 0;
+    log("Fetched users's entry. Contribution: $userContribution");
 
     // Build the message
     final messageBuilder = StringBuffer();
@@ -46,11 +53,20 @@ Future<void> todayHandler(Context ctx) async {
 
       // Add countdown timer info
       final now = DateTime.now().toUtc();
-      final drawTime = DateTime.utc(now.year, now.month, now.day, 12); // 12 UTC
+      final drawTime = DateTime.utc(
+        now.year,
+        now.month,
+        now.day,
+        23,
+        59,
+      ); // 23:59 UTC
       final targetDrawTime =
-          now.hour >= 12 ? drawTime.add(const Duration(days: 1)) : drawTime;
-      final hoursRemaining = targetDrawTime.difference(now).inHours;
-      final minutesRemaining = targetDrawTime.difference(now).inMinutes % 60;
+          now.hour >= 23 && now.minute >= 59
+              ? drawTime.add(const Duration(days: 1))
+              : drawTime;
+      final timeRemaining = targetDrawTime.difference(now);
+      final hoursRemaining = timeRemaining.inHours;
+      final minutesRemaining = timeRemaining.inMinutes % 60;
 
       messageBuilder.writeln(
         '⏰ *Drawing in: ${hoursRemaining}h ${minutesRemaining}m*\n',
@@ -80,9 +96,11 @@ Future<void> todayHandler(Context ctx) async {
       final now = DateTime.now().toUtc();
       final drawTime = DateTime.utc(now.year, now.month, now.day, 12); // 12 UTC
 
-      // If current time is past 12 UTC, use tomorrow's date
+      // If current time is past today's draw time, use tomorrow's draw time
       final targetDrawTime =
-          now.hour >= 12 ? drawTime.add(const Duration(days: 1)) : drawTime;
+          now.isAfter(drawTime)
+              ? drawTime.add(const Duration(days: 1))
+              : drawTime;
 
       final hoursRemaining = targetDrawTime.difference(now).inHours;
       final minutesRemaining = targetDrawTime.difference(now).inMinutes % 60;

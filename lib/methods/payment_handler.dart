@@ -96,9 +96,11 @@ Future<void> _processDailyDrawPayment(
 
     // Calculate time remaining until draw
     final now = DateTime.now().toUtc();
-    final drawTime = DateTime.utc(now.year, now.month, now.day, 12);
+    final todayDrawTime = DateTime.utc(now.year, now.month, now.day, 23, 59);
     final nextDraw =
-        now.hour >= 12 ? drawTime.add(const Duration(days: 1)) : drawTime;
+        now.isAfter(todayDrawTime)
+            ? todayDrawTime.add(const Duration(days: 1))
+            : todayDrawTime;
     final remaining = nextDraw.difference(now);
 
     // Format time remaining

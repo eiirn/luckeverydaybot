@@ -1,6 +1,14 @@
 /// Utility functions for consistent formatting throughout the app.
 library;
 
+/// Gets the current date in "DD-MM-YYYY" format.
+String getCurrentDate() {
+  final now = DateTime.now().toUtc();
+  return '${now.day.toString().padLeft(2, '0')}-'
+      '${now.month.toString().padLeft(2, '0')}-'
+      '${now.year}';
+}
+
 /// Formats a star amount for display, adding commas as thousand separators
 /// and the star emoji for better readability and visual appeal.
 ///
