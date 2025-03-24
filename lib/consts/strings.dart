@@ -3,6 +3,8 @@ class CallbackQueryData {
 
   static const getStarted = 'get-started';
   static const help = 'help';
+
+  static final languageExp = RegExp(r'^lang-([a-zA-Z]+)$');
 }
 
 class PayloadData {

@@ -4,12 +4,16 @@ import 'language.dart';
 /// Default English language pack.
 final en = English();
 
-class English implements Language {
+class English extends Language {
   /// Singleton
   factory English() => _instance;
 
-  const English._internal();
+  const English._internal() : super('English 🌐', 'en');
+
   static const English _instance = English._internal();
+
+  String get welcomeLanguagePrompt =>
+      'Welcome to the Cash Splash! 🎁\n\nPlease select your preferred language:';
 
   @override
   String welcomeMessage([String? name]) => '''
@@ -195,4 +199,17 @@ Send your first star payment to join today's draw! Good luck! ✨''';
 
   String get noFrom =>
       'Please use me in private chats or please do not use me as anonymous admin.';
+
+  @override
+  String languagePrompt(String lang) =>
+      'Your current language: $lang\n\nSelect a language:';
+
+  @override
+  String languageSetTo(String lang) => 'Language set to $lang';
+  @override
+  String languageUpdatedTo(String lang) => 'Language updated to $lang';
+
+  @override
+  String yourLangUpdated(String lang) =>
+      'Your language has been updated to $lang!';
 }

@@ -1,6 +1,7 @@
 import 'package:luckeverydaybot/consts/strings.dart';
 import 'package:luckeverydaybot/handlers/accept_precheck.dart';
 import 'package:luckeverydaybot/handlers/join_handler.dart';
+import 'package:luckeverydaybot/handlers/language_handler.dart';
 import 'package:luckeverydaybot/handlers/payment_handler.dart';
 import 'package:luckeverydaybot/handlers/start_handler.dart';
 import 'package:luckeverydaybot/handlers/today_handler.dart';
@@ -21,9 +22,11 @@ void main(List<String> args) async {
   }
 
   bot.use(UserGetter());
+  bot.callbackQuery(CallbackQueryData.languageExp, setLanguageHandler);
   bot.command('start', startHandler);
   bot.command('today', todayHandler);
   bot.command('join', joinHandler);
+  bot.command('language', languageHandler);
   bot.onPreCheckoutQuery(acceptPrecheckout);
   bot.onSuccessfulPayment(paymentHandler);
   bot.callbackQuery(CallbackQueryData.getStarted, todayHandler);

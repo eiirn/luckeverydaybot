@@ -6,6 +6,7 @@ import '../consts/strings.dart';
 import '../database/user_methods.dart';
 import '../extensions/user_ext.dart';
 import '../luckeverydaybot.dart';
+import 'language_handler.dart';
 
 Future<void> startHandler(Context ctx) async {
   final welcomeImage = InputFile.fromFile(File('assets/welcome.webp'));
@@ -18,11 +19,16 @@ Future<void> startHandler(Context ctx) async {
   final String username = (ctx.from?.firstName ?? 'Winner!').trim();
   var user = ctx.user;
   if (user == null) {
+    languageHandler(ctx).ignore();
     log('Creating user...');
-    user = await UserMethods(
-      supabase,
-    ).createUser(userId: ctx.from!.id, name: username, referralId: referredBy);
+    user = await UserMethods(supabase).createUser(
+      userId: ctx.from!.id,
+      name: username,
+      referralId: referredBy,
+      langauge: ctx.from?.languageCode,
+    );
     log('User created ${user.userId}!');
+    return;
   }
 
   // Define inline keyboard only once

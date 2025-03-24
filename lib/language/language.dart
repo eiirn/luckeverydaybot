@@ -2,9 +2,18 @@ import 'en.dart';
 
 /// Represents the language pack.
 abstract class Language {
+  const Language(this.name, this.code);
+
   factory Language.of(String code) => switch (code) {
     'en' => English(),
     _ => English(),
+  };
+  final String name;
+  final String code;
+
+  static List<Language> availableLanguages() => [en];
+  static Map<String, Language> languageMap = {
+    for (final lang in availableLanguages()) lang.code: lang,
   };
 
   /// Welcome message
@@ -134,4 +143,16 @@ abstract class Language {
 
   /// Error message when retrieving today's draw information fails
   String get todayErrorMessage;
+
+  /// Prompt to change current language
+  String languagePrompt(String lang);
+
+  /// Language set to text
+  String languageSetTo(String lang);
+
+  /// Language updated to text
+  String languageUpdatedTo(String lang);
+
+  /// Your language has been updated to text
+  String yourLangUpdated(String lang);
 }

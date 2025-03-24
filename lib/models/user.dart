@@ -16,9 +16,10 @@ class BotUser {
     DateTime? createdDate,
     this.isVip = false,
     this.vipDate,
-    this.langCode = 'en',
+    this.langCode = 'none',
     this.balance = 0,
     this.isPremium = false,
+    this.language,
   }) : createdDate = createdDate ?? DateTime.now().toUtc();
 
   /// Create a User instance from a JSON map (for when fetching from Supabase)
@@ -44,6 +45,7 @@ class BotUser {
     langCode: json['lang_code'] as String? ?? 'en',
     balance: json['balance'] as int,
     isPremium: json['is_premium'] as bool? ?? false,
+    language: json['language'] as String?,
   );
 
   final int userId;
@@ -58,11 +60,18 @@ class BotUser {
   DateTime createdDate;
   bool isVip;
   DateTime? vipDate;
+
+  /// In bot language code
   String langCode;
+
+  /// Balance that we should return the user sometime
   final int balance;
 
   /// Whether user has Telegram Premium
   final bool isPremium;
+
+  /// Telegram langauge code of the user (just for analytics)
+  final String? language;
 
   /// Convert User instance to a JSON map (for when storing in Supabase)
   Map<String, dynamic> toJson() => {
@@ -81,6 +90,7 @@ class BotUser {
     'lang_code': langCode,
     'balance': balance,
     'is_premium': isPremium,
+    'language': language,
   };
 
   /// Copy with method for creating a new instance with updated fields
@@ -100,6 +110,7 @@ class BotUser {
     String? langCode,
     int? balance,
     bool? isPremium,
+    String? language,
   }) => BotUser(
     userId: userId ?? this.userId,
     name: name ?? this.name,
@@ -116,6 +127,7 @@ class BotUser {
     langCode: langCode ?? this.langCode,
     balance: balance ?? this.balance,
     isPremium: isPremium ?? this.isPremium,
+    language: language ?? this.language,
   );
 
   /// Get the user's language pack.

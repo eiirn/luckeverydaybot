@@ -16,6 +16,7 @@ class UserMethods {
     required int userId,
     required String name,
     int? referralId,
+    String? langauge,
   }) async {
     try {
       // Check if user already exists
@@ -29,6 +30,7 @@ class UserMethods {
         userId: userId,
         name: name,
         referredBy: referralId,
+        language: langauge,
       );
 
       // Insert the new user into the database
