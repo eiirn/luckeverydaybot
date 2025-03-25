@@ -226,7 +226,7 @@ Send your first star payment to join today's draw! Good luck! ✨''';
   String get language => '🌏 Language';
 
   @override
-  String get inviteLink => '🔗 Invite';
+  String get inviteLink => 'Invite 🔗';
 
   @override
   String get settingsTitle => 'User Settings';

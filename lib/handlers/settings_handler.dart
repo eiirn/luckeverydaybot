@@ -33,14 +33,17 @@ Future<void> settingsHandler(Context ctx) async {
   final message = '''
 ⚙️ *${user.lang.settingsTitle}*
 
-👤 *${user.lang.nameLabel}:* ${user.name}
-💰 *${user.lang.balance}:* ${user.balance} ${user.lang.stars}
-🏆 *${user.lang.totalWinnings}:* $totalWinning ${user.lang.stars}
-💸 *${user.lang.totalSpent}:* $totalStarsSpent ${user.lang.stars}
-🗓️ *${user.lang.joinDate}:* $joinDate
-👑 *${user.lang.vipStatus}:* $vipStatus $vipDateInfo
-👥 *${user.lang.referrals}:* $count ${user.lang.people}
-🔤 *${user.lang.language}:* ${user.langCode.toUpperCase()}
+*${user.lang.nameLabel}:* ${user.name}
+
+*${user.lang.balance}:* ${user.balance} ${user.lang.stars}
+*${user.lang.totalWinnings}:* $totalWinning ${user.lang.stars}
+*${user.lang.totalSpent}:* $totalStarsSpent ${user.lang.stars}
+*${user.lang.joinDate}:* $joinDate
+
+*${user.lang.vipStatus}:* $vipStatus $vipDateInfo
+
+*${user.lang.referrals}:* $count ${user.lang.people}
+*${user.lang.language}:* ${user.langCode.toUpperCase()}
 
 ${user.lang.tapButtonsBelow}
 ''';
