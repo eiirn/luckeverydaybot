@@ -206,4 +206,13 @@ abstract class Language {
 
   /// Instructional text to tap buttons
   String get tapButtonsBelow;
+
+  /// Prompt for update name
+  String get namePrompt;
+
+  /// Message to be sent after updating name.
+  String get nameUpdated;
+
+  /// Invalid name
+  String get invalidName;
 }

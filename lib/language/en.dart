@@ -267,4 +267,15 @@ Send your first star payment to join today's draw! Good luck! ✨''';
   @override
   String get tapButtonsBelow =>
       'Tap the buttons below to update your settings:';
+
+  @override
+  String get namePrompt =>
+      'What can we call you? This will be set as your display name: ';
+
+  @override
+  String get nameUpdated => 'Successfully updated your display name.';
+
+  @override
+  String get invalidName =>
+      'The name you entered is invalid. Please try again with a different name.';
 }

@@ -7,7 +7,10 @@ import '../language/en.dart';
 import '../luckeverydaybot.dart';
 
 /// The /settings command handler
-Future<void> settingsHandler(Context ctx) async {
+Future<void> settingsHandler(
+  Context ctx, {
+  bool editWithCallback = false,
+}) async {
   final user = ctx.user;
 
   if (user == null) {
@@ -69,10 +72,18 @@ ${user.lang.tapButtonsBelow}
     keyboard = keyboard.addUrl(user.lang.joinChat, CommonData.group);
   }
 
-  // Send the settings message with the inline keyboard
-  await ctx.reply(
-    message,
-    parseMode: ParseMode.markdown,
-    replyMarkup: keyboard,
-  );
+  if (editWithCallback) {
+    await ctx.editMessageText(
+      message,
+      parseMode: ParseMode.markdown,
+      replyMarkup: keyboard,
+    );
+  } else {
+    // Send the settings message with the inline keyboard
+    await ctx.reply(
+      message,
+      parseMode: ParseMode.markdown,
+      replyMarkup: keyboard,
+    );
+  }
 }
