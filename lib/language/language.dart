@@ -257,4 +257,10 @@ abstract class Language {
 
   /// Tap to copy button title
   String get linkTapCopyButtonTitle;
+
+  /// Privacy Policy
+  String get privacyPolicy;
+
+  /// Terms and conditions
+  String get termsAndConditions;
 }

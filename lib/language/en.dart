@@ -349,4 +349,86 @@ Send your first star payment to join today's draw! Good luck! ✨''';
 
   @override
   String get linkTapCopyButtonTitle => '🔗 Copy Invite Link';
+
+  /// Privacy policy of the bot in HTML format.
+  @override
+  String get privacyPolicy => '''
+<b>🔒 Privacy Policy</b>
+
+Welcome to our Telegram lucky draw bot! We take your privacy seriously and want to be transparent about the data we collect and how we use it.
+
+<b>Data We Collect:</b>
+• Telegram User ID
+• Telegram Username/Display Name
+• Transaction records (payments and winnings)
+• Language preferences
+• Telegram Premium status
+• Channel and group membership status
+• Referral information
+
+<b>How We Use Your Data:</b>
+• To create and maintain your account
+• To track daily pool entries and distribute prizes
+• To process transactions and maintain balance records
+• To identify winners and distribute rewards
+• To improve bot functionality and user experience
+• To prevent fraud and abuse
+
+<b>Data Security:</b>
+We implement appropriate security measures to protect your personal information.
+
+<b>Third-Party Sharing:</b>
+We do not sell, trade, or otherwise transfer your information to third parties. Your data is only used for the functionality of this bot.
+
+<b>Changes to This Policy:</b>
+We may update our privacy policy from time to time. Any changes will be communicated through the bot.
+
+<b>Contact Us:</b>
+If you have any questions about this privacy policy, please contact us using the in the chat.
+
+By using this bot, you agree to the collection and use of information in accordance with this policy.
+''';
+
+  @override
+  String get termsAndConditions => '''
+<b>📜 Terms and Conditions</b>
+
+By using this bot, you agree to the following terms:
+
+<b>Age Restriction:</b>
+• You must be at least 18 years old to use this service.
+• If you are under 18, parental guidance and permission is required.
+
+<b>Responsible Gaming:</b>
+• This is a lottery-style game that involves financial transactions.
+• You are solely responsible for managing your spending and play time.
+• We encourage setting personal limits on how much you spend daily.
+
+<b>Financial Risks:</b>
+• Participation may result in financial losses.
+• Only spend what you can afford to lose.
+• There is no guarantee of winning any prizes, at the same time you may big win as well.
+• Past results do not guarantee future outcomes.
+
+<b>Technical Issues:</b>
+• We are not responsible for any technical issues, delays, or errors that may affect gameplay or results.
+• We reserve the right to cancel or modify any draw if technical or other issues arise.
+
+<b>Fair Play:</b>
+• Any attempt to manipulate the game or exploit bugs will result in immediate account suspension.
+• We reserve the right to refuse service to anyone for any reason.
+
+<b>Prize Distribution:</b>
+• Winners will be selected as described in the game rules. (See /help)
+• Winner selection is an automated process. An fair algorithm is used to randomly pick a winner everyday at 11:59 PM GMT with weightage added as per game rules.
+• A service fee of 10-15% will be deducted from the prize pool.
+• All decisions regarding winners are final.
+
+<b>Addiction Warning:</b>
+• Gambling-like activities can be addictive.
+• If you're experiencing signs of addiction (spending more than you can afford, neglecting responsibilities, or playing to escape problems), please seek help.
+• Resources for gambling addiction.
+
+By continuing to use this bot, you acknowledge that you have read, understood, and agree to these terms.
+''';
 }
