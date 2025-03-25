@@ -3,6 +3,7 @@ import 'package:luckeverydaybot/handlers/accept_precheck.dart';
 import 'package:luckeverydaybot/handlers/join_handler.dart';
 import 'package:luckeverydaybot/handlers/language_handler.dart';
 import 'package:luckeverydaybot/handlers/payment_handler.dart';
+import 'package:luckeverydaybot/handlers/settings_handler.dart';
 import 'package:luckeverydaybot/handlers/start_handler.dart';
 import 'package:luckeverydaybot/handlers/today_handler.dart';
 import 'package:luckeverydaybot/luckeverydaybot.dart';
@@ -30,6 +31,7 @@ void main(List<String> args) async {
   bot.onPreCheckoutQuery(acceptPrecheckout);
   bot.onSuccessfulPayment(paymentHandler);
   bot.callbackQuery(CallbackQueryData.getStarted, todayHandler);
+  bot.command('settings', settingsHandler);
 
   await bot.start();
 }

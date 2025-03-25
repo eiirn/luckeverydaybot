@@ -3,6 +3,9 @@ class CallbackQueryData {
 
   static const getStarted = 'get-started';
   static const help = 'help';
+  static const updateName = 'update-name';
+  static const vipStatus = 'vip-status';
+  static const language = 'language';
 
   static final languageExp = RegExp(r'^lang-([a-zA-Z]+)$');
 }

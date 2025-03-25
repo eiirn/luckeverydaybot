@@ -54,9 +54,7 @@ Future<void> setLanguageHandler(Context ctx) async {
 
   if (user == null) {
     // This is unexpected, but handle it gracefully
-    await ctx.answerCallbackQuery(
-      text: 'Please use /start to create an account first.',
-    );
+    await ctx.answerCallbackQuery(text: en.createAccountFirst);
     return;
   }
 

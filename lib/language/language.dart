@@ -155,4 +155,55 @@ abstract class Language {
 
   /// Your language has been updated to text
   String yourLangUpdated(String lang);
+
+  /// Update name (in settings)
+  String get updateName;
+
+  /// Vip Status in settings
+  String get vipStatus;
+
+  /// Language button title in settings.
+  String get language;
+
+  /// Invite link button title
+  String get inviteLink;
+
+  /// Settings page title
+  String get settingsTitle;
+
+  /// Name label
+  String get nameLabel;
+
+  /// Balance label
+  String get balance;
+
+  /// Stars (currency unit)
+  String get stars;
+
+  /// Total winnings label
+  String get totalWinnings;
+
+  /// Total spent label
+  String get totalSpent;
+
+  /// Account join date label
+  String get joinDate;
+
+  /// Active status text
+  String get active;
+
+  /// Inactive status text
+  String get inactive;
+
+  /// "Since" text for dates
+  String get since;
+
+  /// Referrals label
+  String get referrals;
+
+  /// "People" text
+  String get people;
+
+  /// Instructional text to tap buttons
+  String get tapButtonsBelow;
 }

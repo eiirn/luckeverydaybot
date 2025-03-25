@@ -110,4 +110,25 @@ class UserMethods {
       throw Exception('Failed to update user field: $e');
     }
   }
+
+  /// Retrieves the number of users referred by a specific user
+  Future<int> getNumberOfReferredUsers(int userId) async {
+    try {
+      final response =
+          await _supabase
+              .from(_tableName)
+              .select('referred_by')
+              .eq('referred_by', userId)
+              .count();
+
+      return response.count;
+    } catch (e, stack) {
+      log(
+        'Error while getting number of referred users.',
+        error: e,
+        stackTrace: stack,
+      );
+      throw Exception('Failed to get number of referred users');
+    }
+  }
 }

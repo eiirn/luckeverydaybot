@@ -212,4 +212,59 @@ Send your first star payment to join today's draw! Good luck! ✨''';
   @override
   String yourLangUpdated(String lang) =>
       'Your language has been updated to $lang!';
+
+  String get createAccountFirst =>
+      'Please use /start to create an account first.';
+
+  @override
+  String get updateName => '👤 Update Name';
+
+  @override
+  String get vipStatus => '🎖️ VIP Status';
+
+  @override
+  String get language => '🌏 Language';
+
+  @override
+  String get inviteLink => '🔗 Invite';
+
+  @override
+  String get settingsTitle => 'User Settings';
+
+  @override
+  String get nameLabel => 'Name';
+
+  @override
+  String get balance => 'Balance';
+
+  @override
+  String get stars => 'stars';
+
+  @override
+  String get totalWinnings => 'Total Winnings';
+
+  @override
+  String get totalSpent => 'Total Spent';
+
+  @override
+  String get joinDate => 'Joined On';
+
+  @override
+  String get active => 'Active';
+
+  @override
+  String get inactive => 'Inactive';
+
+  @override
+  String get since => 'since';
+
+  @override
+  String get referrals => 'Referrals';
+
+  @override
+  String get people => 'people';
+
+  @override
+  String get tapButtonsBelow =>
+      'Tap the buttons below to update your settings:';
 }
