@@ -1,9 +1,7 @@
 import 'package:televerse/televerse.dart';
 
-import '../../database/user_methods.dart';
 import '../../extensions/user_ext.dart';
 import '../../language/en.dart';
-import '../../luckeverydaybot.dart';
 
 Future<void> inviteHandler(Context ctx) async {
   final user = ctx.user;
@@ -13,8 +11,7 @@ Future<void> inviteHandler(Context ctx) async {
   }
 
   final lang = user.lang;
-  final methods = UserMethods(supabase);
-  final count = await methods.getNumberOfReferredUsers(user.userId);
+  final count = user.totalReferrals;
 
   final inviteLink = 'https://t.me/${ctx.me.username}?start=${user.userId}';
 

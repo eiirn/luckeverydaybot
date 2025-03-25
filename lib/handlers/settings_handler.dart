@@ -1,10 +1,8 @@
 import 'package:televerse/televerse.dart';
 
 import '../consts/strings.dart';
-import '../database/user_methods.dart';
 import '../extensions/user_ext.dart';
 import '../language/en.dart';
-import '../luckeverydaybot.dart';
 
 /// The /settings command handler
 Future<void> settingsHandler(
@@ -18,8 +16,7 @@ Future<void> settingsHandler(
     return;
   }
 
-  final userMethods = UserMethods(supabase);
-  final count = await userMethods.getNumberOfReferredUsers(user.userId);
+  final count = user.totalReferrals;
   final totalWinning = user.winnings;
   final totalStarsSpent = user.totalSpends;
 
