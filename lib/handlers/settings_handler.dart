@@ -36,7 +36,7 @@ Future<void> settingsHandler(
   final message = '''
 ⚙️ *${user.lang.settingsTitle}*
 
-*${user.lang.nameLabel}:* ${user.name}
+*${user.lang.nameLabel}:* ${user.name} ${user.isVip ? '🎖️' : ''}
 
 *${user.lang.balance}:* ${user.balance} ${user.lang.stars}
 *${user.lang.totalWinnings}:* $totalWinning ${user.lang.stars}

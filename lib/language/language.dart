@@ -215,4 +215,31 @@ abstract class Language {
 
   /// Invalid name
   String get invalidName;
+
+  /// VIP Status title
+  String get vipStatusTitle;
+
+  /// Active VIP status message
+  String vipStatusActive(String? date);
+
+  /// Inactive VIP status message
+  String get vipStatusInactive;
+
+  /// Activate VIP button text
+  String get activateVip;
+
+  /// Referral status info
+  String referralStatusInfo(bool hasBeenReferred);
+
+  /// VIP status purchase invoice title
+  String get vipInvoiceTitle;
+
+  /// VIP status purchase invoice description
+  String vipInvoiceDescription(bool hasBeenReferred);
+
+  /// VIP status purchase invoice label
+  String get vipInvoiceLabel;
+
+  /// Activated VIP status
+  String get activatedVip;
 }

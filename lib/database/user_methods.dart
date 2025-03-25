@@ -4,11 +4,11 @@ import 'package:supabase/supabase.dart' hide User;
 import '../models/user.dart';
 
 class UserMethods {
-  // Table name in Supabase
-
-  UserMethods(this._supabase);
+  const UserMethods(SupabaseClient supabase) : _supabase = supabase;
   final SupabaseClient _supabase;
-  final String _tableName = 'users';
+
+  /// Table name in Supabase
+  static const String _tableName = 'users';
 
   /// Creates a new user in the database
   /// Returns the created User object or throws an exception if creation fails

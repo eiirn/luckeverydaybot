@@ -60,8 +60,33 @@ Future<void> paymentHandler(Context ctx) async {
 
   if (payload == PayloadData.betPaylod) {
     await _processDailyDrawPayment(ctx, user, successfulPayment);
+  } else if (payload == PayloadData.vipPayload) {
+    await _processVipStatusPayment(ctx);
   } else {
     await ctx.reply(user.lang.unknownPayment(transaction.amount));
+  }
+}
+
+/// Process payments for activating the vip status.
+Future<void> _processVipStatusPayment(Context ctx) async {
+  try {
+    // Acknowledge receipt immediately
+    await ctx.react('⚡');
+    log('Reacted to the message');
+  } catch (err, stack) {
+    log('Error while reacting!', error: err, stackTrace: stack);
+  }
+
+  final methods = UserMethods(supabase);
+  try {
+    final user = await methods.updateUser(ctx.user!.copyWith(isVip: true));
+    await ctx.reply(user.lang.activatedVip, parseMode: ParseMode.markdown);
+  } catch (err, stack) {
+    log(
+      "Error while updating user's vip status",
+      error: err,
+      stackTrace: stack,
+    );
   }
 }
 

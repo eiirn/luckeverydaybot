@@ -278,4 +278,56 @@ Send your first star payment to join today's draw! Good luck! ✨''';
   @override
   String get invalidName =>
       'The name you entered is invalid. Please try again with a different name.';
+
+  @override
+  String get vipStatusTitle => '🎖️ *VIP STATUS* 🎖️';
+
+  @override
+  String vipStatusActive(String? date) =>
+      '✅ Your VIP status is *ACTIVE*!\n'
+      '${date != null ? 'Expires on: *$date*\n\n' : '\n'}'
+      'Benefits:\n'
+      '• Higher chance of winning lucky draws\n'
+      '• No 5% cut on referral winnings\n'
+      '• Special VIP emoji in winners list';
+
+  @override
+  String get vipStatusInactive =>
+      '❌ You do not have VIP status yet.\n\n'
+      'Benefits of VIP:\n'
+      '• Higher chance of winning lucky draws\n'
+      '• No 5% cut on referral winnings\n'
+      '• Special VIP emoji in winners list\n\n'
+      'Purchase VIP status for 399 ⭐ (lifetime membership!)';
+
+  @override
+  String get activateVip => '⭐ Activate VIP Status (399 ⭐)';
+
+  @override
+  String referralStatusInfo(bool hasBeenReferred) =>
+      '${hasBeenReferred ? "ℹ️ You joined through a referral link." : ""}\n'
+      '${hasBeenReferred ? "If you win, 5% of your prize goes to your referrer." : ""}';
+
+  @override
+  String get vipInvoiceTitle => '🎖️ VIP Status Activation';
+
+  @override
+  String vipInvoiceDescription(bool hasBeenReferred) {
+    const x = 'Activate VIP status: Get higher winning chances';
+    return hasBeenReferred
+        ? '$x and no 5% referral fee on winnings!'
+        : '$x in all daily lucky draws!';
+  }
+
+  @override
+  String get vipInvoiceLabel => 'VIP Status (Lifetime)';
+
+  @override
+  String get activatedVip =>
+      '🎖️ *Congratulations!* 🎖️\n\n'
+      'Your VIP status has been successfully activated! You now enjoy:\n'
+      '• Higher chances of winning in daily draws\n'
+      '• No commission on referral winnings\n'
+      '• VIP badge in winners list\n\n'
+      'Thank you for supporting StarLuck Draw! Good luck in future draws! ✨';
 }
