@@ -5,6 +5,8 @@ import 'dart:math' as math;
 
 import 'package:supabase/supabase.dart';
 import 'package:televerse/telegram.dart';
+import 'package:televerse/televerse.dart';
+import '../consts/strings.dart';
 import '../luckeverydaybot.dart';
 import '../models/pool_entry.dart';
 import '../models/user.dart';
@@ -91,19 +93,112 @@ class WinnerSelector {
       log('🎉 Winner selected: ${winner.name} (ID: ${winner.userId})');
       log('💵 Prize of $prizeAmount stars awarded!');
 
+      final hasBeenReferred = !winner.isVip && winner.referredBy != null;
+
+      var winning = prizeAmount;
+      if (hasBeenReferred) {
+        winning = prizeAmount - (prizeAmount * 0.05).round();
+        log('User was referred by ${winner.referredBy}');
+        log('We should send 5% commission to them.');
+      }
+
+      // Announce the winner.
+      try {
+        await api.sendMessage(
+          const ChatID(CommonData.channelId),
+          "🎉 *WINNER ANNOUNCEMENT* 🎉\n\n🏆 Congratulations to *${winner.name}* ${winner.isVip ? '🎖️' : ''} for winning today's lucky draw!\n\n💰 Prize: *$prizeAmount stars*\n📊 Total pool: *$totalPool stars*\n\nThe more stars you contribute, the higher your chances to win. Will YOU be our next lucky winner? 🍀",
+          replyMarkup: InlineKeyboard().addUrl(
+            'Join next round',
+            'https://t.me/TheCashSplashBot',
+          ),
+          parseMode: ParseMode.markdown,
+        );
+      } catch (err, stack) {
+        log('Error while posting on channel', error: err, stackTrace: stack);
+      }
+      try {
+        if (hasBeenReferred) {
+          if (hasBeenReferred) {
+            await api.sendMessage(
+              ChatID(winner.userId),
+              "🎊 *Congratulations!* You've WON today's Lucky Draw!\n\n💰 Your prize: *$winning stars* has been credited to your account.\n\n📝 Note: 5% (${(prizeAmount * 0.05).round()} stars) of your total win was shared with your referrer as commission.\n\n⭐ Want to keep 100% of your winnings? Upgrade to VIP status to eliminate referral commissions on future wins!",
+              parseMode: ParseMode.markdown,
+            );
+          }
+        } else {
+          await api.sendMessage(
+            ChatID(winner.userId),
+            "🎊 *Congratulations!* You've WON today's Lucky Draw!\n\n💰 Your prize: *$prizeAmount stars* worth of gifts are coming on the way!\n\nKeep participating daily for more chances to win big! 🍀",
+            parseMode: ParseMode.markdown,
+          );
+        }
+      } catch (err, stack) {
+        log('Error while posting on channel', error: err, stackTrace: stack);
+      }
+
       // 8. Get available gifts from Telegram API
       final gifts = await api.getAvailableGifts();
 
       // 9. Select optimal gifts for the prize amount
-      final optimal = await selectOptimalGifts(prizeAmount, gifts.gifts);
+      final optimal = selectOptimalGifts(winning + winner.balance, gifts.gifts);
 
       // 10. Log selected gift IDs
       final giftIds = optimal.gifts.map((gift) => gift.id).toList();
-      log('🎁 Selected gift IDs: ${giftIds.join(", ")}');
+      log(
+        '🎁 Selected gift IDs: ${giftIds.join(", ")}',
+        name: 'Gifts for Winner',
+      );
 
       // 11. Add any unused stars to the user's balance
       if (optimal.unusedStars > 0) {
-        await updateUserBalance(winner.userId, optimal.unusedStars);
+        await updateUserBalance(
+          winner.userId,
+          optimal.unusedStars,
+          overwrite: true,
+        );
+      }
+
+      // 12. Process referral commission if applicable
+      if (hasBeenReferred) {
+        final commissionAmount = (prizeAmount * 0.05).round();
+        log(
+          '💸 Sending commission of $commissionAmount stars to referrer ${winner.referredBy}',
+        );
+        // 13. Find optimal gifts for the referrer
+        final opGiftsForReferrer = selectOptimalGifts(
+          commissionAmount,
+          gifts.gifts,
+        );
+
+        // 14. Log selected gift IDs
+        final giftIdsForRef =
+            opGiftsForReferrer.gifts.map((gift) => gift.id).toList();
+        log(
+          '🎁 Selected gift IDs for : ${giftIdsForRef.join(", ")}',
+          name: 'Gifts for Referrer',
+        );
+
+        if (opGiftsForReferrer.unusedStars > 0) {
+          await updateUserBalance(
+            winner.referredBy!,
+            opGiftsForReferrer.unusedStars,
+          );
+        }
+
+        // Notify the referrer about the commission (optional)
+        try {
+          await api.sendMessage(
+            ChatID(winner.referredBy!),
+            "🎉 *Referral Bonus!* 🎉\n\nYou just received *$commissionAmount stars* as commission because someone you invited won today's lucky draw! Keep inviting friends to earn more commissions.",
+            parseMode: ParseMode.markdown,
+          );
+        } catch (e, stack) {
+          log(
+            'Failed to notify referrer about commission.',
+            error: e,
+            stackTrace: stack,
+          );
+        }
       }
     } catch (e, stacktrace) {
       log('❌ Error selecting winner.', error: e, stackTrace: stacktrace);
@@ -313,10 +408,7 @@ class WinnerSelector {
   }
 
   /// Find the optimal combination of gifts for the given prize amount
-  Future<OptimalGifts> selectOptimalGifts(
-    int prizeAmount,
-    List<Gift> availableGifts,
-  ) async {
+  OptimalGifts selectOptimalGifts(int prizeAmount, List<Gift> availableGifts) {
     // Sort gifts by star count in descending order
     // This helps us prioritize larger gifts first
     final sortedGifts = [...availableGifts]
@@ -376,11 +468,17 @@ class WinnerSelector {
       0,
       (sum, gift) => sum + gift.starCount,
     );
-    log('🎁 Selected ${selectedGifts.length} gifts worth $totalStars stars');
-    log('⭐ Unused stars: $remainingAmount');
+    log(
+      '🎁 Selected ${selectedGifts.length} gifts worth $totalStars stars',
+      name: 'selectOptimalGifts',
+    );
+    log('⭐ Unused stars: $remainingAmount', name: 'selectOptimalGifts');
 
     for (final gift in selectedGifts) {
-      log('  Gift ID: ${gift.id}, Stars: ${gift.starCount}');
+      log(
+        '  Gift ID: ${gift.id}, Stars: ${gift.starCount}',
+        name: 'selectOptimalGifts',
+      );
     }
 
     return OptimalGifts(selectedGifts, remainingAmount);
@@ -391,7 +489,17 @@ class WinnerSelector {
   /// [userId] - The ID of the user whose balance to update
   /// [amount] - The amount of stars to add (can be negative to subtract)
   /// Returns the new balance after the update
-  Future<int> updateUserBalance(int userId, int amount) async {
+  /// Update a user's star balance
+  ///
+  /// [userId] - The ID of the user whose balance to update
+  /// [amount] - The amount of stars to set or add
+  /// [overwrite] - If true, overwrites the balance with [amount]; if false, adds [amount] to the current balance
+  /// Returns the new balance after the update
+  Future<int> updateUserBalance(
+    int userId,
+    int amount, {
+    bool overwrite = false,
+  }) async {
     try {
       // First get the current balance
       final response =
@@ -403,7 +511,9 @@ class WinnerSelector {
 
       // Default to 0 if balance is null (might be the case for older records)
       final int currentBalance = (response['balance'] as int?) ?? 0;
-      final int newBalance = currentBalance + amount;
+
+      // Calculate new balance based on overwrite flag
+      final int newBalance = overwrite ? amount : currentBalance + amount;
 
       // Update the balance
       await supabase
@@ -411,9 +521,13 @@ class WinnerSelector {
           .update({'balance': newBalance})
           .eq('user_id', userId);
 
-      log(
-        '💰 Updated balance for user $userId: $currentBalance → $newBalance (${amount >= 0 ? "+$amount" : amount})',
-      );
+      if (overwrite) {
+        log('💰 Set balance for user $userId: $currentBalance → $newBalance');
+      } else {
+        log(
+          '💰 Updated balance for user $userId: $currentBalance → $newBalance (${amount >= 0 ? "+$amount" : amount})',
+        );
+      }
 
       return newBalance;
     } catch (e, stack) {
