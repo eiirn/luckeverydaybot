@@ -416,9 +416,16 @@ By using this bot, you agree to the following terms:
 
 <b>Prize Distribution:</b>
 • Winners will be selected as described in the game rules. (See /help)
-• Winner selection is an automated process. An fair algorithm is used to randomly pick a winner everyday at 11:59 PM GMT with weightage added as per game rules.
+• Winner selection and prize distribution is an automated process. A fair algorithm is used to randomly pick a winner everyday at 11:59 PM GMT with weightage added as per game rules.
 • A service fee of 10-15% will be deducted from the prize pool.
+• If you are referred by another user and you do not have a valid VIP status, 5% of the prize will be commissioned to the referrer.
 • All decisions regarding winners are final.
+
+<b>Refund Policy:</b>
+- If you are the only participant in a daily pool, your stars will be automatically refunded.
+- We only process Telegram Stars for daily pool entries and VIP status activation.
+- Any accidental or unrelated transactions may not be recoverable.
+- For assistance with transaction issues, please contact support in our chat group.
 
 <b>Addiction Warning:</b>
 • Gambling-like activities can be addictive.
