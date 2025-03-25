@@ -242,4 +242,19 @@ abstract class Language {
 
   /// Activated VIP status
   String get activatedVip;
+
+  /// Invite feature title
+  String get inviteTitle;
+
+  /// Invite description text
+  String get inviteDescription;
+
+  /// Referral count message
+  String referralCount(int count);
+
+  /// Tap to copy invite link message
+  String get tapToCopyInviteLink;
+
+  /// Tap to copy button title
+  String get linkTapCopyButtonTitle;
 }

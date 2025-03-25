@@ -3,6 +3,7 @@ import 'package:luckeverydaybot/handlers/accept_precheck.dart';
 import 'package:luckeverydaybot/handlers/join_handler.dart';
 import 'package:luckeverydaybot/handlers/language_handler.dart';
 import 'package:luckeverydaybot/handlers/payment_handler.dart';
+import 'package:luckeverydaybot/handlers/settings/invite_handler.dart';
 import 'package:luckeverydaybot/handlers/settings/update_name.dart';
 import 'package:luckeverydaybot/handlers/settings/vip_status_handler.dart';
 import 'package:luckeverydaybot/handlers/settings_handler.dart';
@@ -38,6 +39,7 @@ void main(List<String> args) async {
   bot.callbackQuery(CallbackQueryData.vipStatus, vipStatusHandler);
   bot.callbackQuery(CallbackQueryData.activateVip, activateVIPStatusHandler);
   bot.callbackQuery(CallbackQueryData.language, languageHandler);
+  bot.callbackQuery(CallbackQueryData.invite, inviteHandler);
 
   await bot.start();
 }

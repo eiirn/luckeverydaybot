@@ -7,6 +7,7 @@ class CallbackQueryData {
   static const vipStatus = 'vip-status';
   static const language = 'language';
   static const activateVip = 'activate-vip';
+  static const invite = 'invite';
 
   static final languageExp = RegExp(r'^lang-([a-zA-Z]+)$');
 }

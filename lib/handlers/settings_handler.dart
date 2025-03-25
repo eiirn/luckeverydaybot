@@ -59,10 +59,7 @@ ${user.lang.tapButtonsBelow}
           .row()
           .add(user.lang.language, CallbackQueryData.language)
           .row()
-          .copyText(
-            user.lang.inviteLink,
-            copyText: 'https://t.me/${ctx.me.username}?start=${user.userId}',
-          )
+          .add(user.lang.inviteLink, CallbackQueryData.invite)
           .row();
 
   if (!user.hasJoinedChannel) {

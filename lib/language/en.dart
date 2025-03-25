@@ -226,7 +226,7 @@ Send your first star payment to join today's draw! Good luck! ✨''';
   String get language => '🌏 Language';
 
   @override
-  String get inviteLink => 'Invite 🔗';
+  String get inviteLink => '🔗 Invite';
 
   @override
   String get settingsTitle => 'User Settings';
@@ -330,4 +330,23 @@ Send your first star payment to join today's draw! Good luck! ✨''';
       '• No commission on referral winnings\n'
       '• VIP badge in winners list\n\n'
       'Thank you for supporting StarLuck Draw! Good luck in future draws! ✨';
+
+  @override
+  String get inviteTitle => '🔗 *INVITE & EARN* 🔗';
+
+  @override
+  String get inviteDescription =>
+      'Invite your friends and family to join StarLuck Draw!\n\n'
+      'When they win any prize, you\'ll receive a 5% commission from their winnings! The more people you invite, the more you can earn!';
+
+  @override
+  String referralCount(int count) =>
+      '👥 *Your Referrals: $count ${count == 1 ? 'person' : 'people'}*';
+
+  @override
+  String get tapToCopyInviteLink =>
+      'Tap the button below to copy your unique invite link:';
+
+  @override
+  String get linkTapCopyButtonTitle => '🔗 Copy Invite Link';
 }
