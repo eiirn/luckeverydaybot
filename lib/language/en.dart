@@ -441,7 +441,7 @@ By continuing to use this bot, you acknowledge that you have read, understood, a
 • Bot accepts star transactions from users and adds to bot's daily pool.
 • At 11:59 PM GMT, an automated algorithm randomly selects a winner and sends the prize pool worth of Telegram Gifts to them.
 
-**Game Rules:**  
+*Game Rules:*
 • The prize pool consists of all user contributions minus 15% service fee.
 • Only one winner is selected per day.  
 • More contributed stars increase the chances of winning.  

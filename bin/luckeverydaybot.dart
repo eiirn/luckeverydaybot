@@ -45,6 +45,7 @@ void main(List<String> args) async {
   bot.command('privacy', privacyHandler);
   bot.command('terms', termsHandler);
   bot.command('help', helpHandler);
+  bot.callbackQuery(CallbackQueryData.help, helpHandler);
 
   await bot.start();
 }
