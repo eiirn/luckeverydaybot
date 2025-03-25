@@ -45,8 +45,13 @@ Future<void> languageHandler(Context ctx) async {
     keyboard = keyboard.add(langText, 'lang-${lang.code}');
   }
 
-  // Send the message with language selection keyboard
-  await ctx.reply(prompt, replyMarkup: keyboard);
+  if (ctx.hasCallbackQuery()) {
+    ctx.answerCallbackQuery().ignore();
+    await ctx.editMessageText(prompt, replyMarkup: keyboard);
+  } else {
+    // Send the message with language selection keyboard
+    await ctx.reply(prompt, replyMarkup: keyboard);
+  }
 }
 
 Future<void> setLanguageHandler(Context ctx) async {

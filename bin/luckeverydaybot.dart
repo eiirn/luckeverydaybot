@@ -37,6 +37,7 @@ void main(List<String> args) async {
   bot.callbackQuery(CallbackQueryData.updateName, updateNameHandler);
   bot.callbackQuery(CallbackQueryData.vipStatus, vipStatusHandler);
   bot.callbackQuery(CallbackQueryData.activateVip, activateVIPStatusHandler);
+  bot.callbackQuery(CallbackQueryData.language, languageHandler);
 
   await bot.start();
 }
