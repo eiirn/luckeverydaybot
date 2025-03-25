@@ -23,6 +23,9 @@ class CommonData {
   const CommonData._();
 
   static const currency = 'XTR';
-  static const channel = 'https://t.me/luckystareveryday';
-  static const group = 'https://t.me/+oN3UYRdvhHU5MGVh';
+  static const channel = 'https://t.me/TheCashSplash';
+  static const group = 'https://t.me/+7Kz76alXRuJjODUx';
+
+  static const groupId = -1002602158964;
+  static const channelId = -1002697838093;
 }

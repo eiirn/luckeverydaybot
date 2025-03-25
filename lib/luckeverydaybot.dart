@@ -9,7 +9,8 @@ final adminIds = EnvReader.getIntList('BOT_ADMIN_IDS');
 
 // Initialize bot
 final api = RawAPI(token);
-final bot = Bot.fromAPI(api);
+final fetcher = LongPolling.allUpdates();
+final bot = Bot.fromAPI(api, fetcher: fetcher);
 final conv = Conversation(bot);
 
 // Supabase configurations

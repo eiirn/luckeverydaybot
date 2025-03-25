@@ -266,4 +266,10 @@ abstract class Language {
 
   /// The help message
   String get helpMessage;
+
+  /// Thanks for joining chat
+  String get thanksForJoiningChat;
+
+  /// Thanks for joining channel
+  String get thanksForJoiningChannel;
 }

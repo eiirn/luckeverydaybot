@@ -457,4 +457,12 @@ By continuing to use this bot, you acknowledge that you have read, understood, a
 • /privacy - To see privacy policy
 • /terms - To see terms
 ''';
+
+  @override
+  String get thanksForJoiningChat =>
+      'Glad to have you in our group! Your chances of winning just got better!';
+
+  @override
+  String get thanksForJoiningChannel =>
+      'Welcome to @TheCashSplash! Joining us just boosted your chances of winning!';
 }
