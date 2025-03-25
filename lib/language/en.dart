@@ -410,10 +410,6 @@ By using this bot, you agree to the following terms:
 • There is no guarantee of winning any prizes, at the same time you may big win as well.
 • Past results do not guarantee future outcomes.
 
-<b>Technical Issues:</b>
-• We are not responsible for any technical issues, delays, or errors that may affect gameplay or results.
-• We reserve the right to cancel or modify any draw if technical or other issues arise.
-
 <b>Fair Play:</b>
 • Any attempt to manipulate the game or exploit bugs will result in immediate account suspension.
 • We reserve the right to refuse service to anyone for any reason.
