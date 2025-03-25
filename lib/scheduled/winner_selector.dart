@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:math' hide log;
+import 'dart:math' as math;
 
 import 'package:supabase/supabase.dart';
 import 'package:televerse/telegram.dart';
@@ -11,8 +12,6 @@ import '../utils/formatting.dart';
 
 /// Selects a winner from the daily pool and distributes the prize
 class WinnerSelector {
-  // 12.5% house fee
-
   WinnerSelector({required this.supabase});
   final SupabaseClient supabase;
   final Random _random = Random.secure();
@@ -86,31 +85,37 @@ class WinnerSelector {
       // 6. Update pool entry to mark winner
       await markWinner(targetDate, winner.userId);
 
-      // 8. Update winner's balance
+      // 7. Update winner's balance
       await updateUserWinnings(winner.userId, prizeAmount);
 
       log('🎉 Winner selected: ${winner.name} (ID: ${winner.userId})');
       log('💵 Prize of $prizeAmount stars awarded!');
 
-      // 7. Get available gifts from Telegram API
+      // 8. Get available gifts from Telegram API
       final gifts = await api.getAvailableGifts();
 
-      // 8. Select optimal gifts for the prize amount
+      // 9. Select optimal gifts for the prize amount
       final optimal = await selectOptimalGifts(prizeAmount, gifts.gifts);
 
-      // 9. Log selected gift IDs
+      // 10. Log selected gift IDs
       final giftIds = optimal.gifts.map((gift) => gift.id).toList();
       log('🎁 Selected gift IDs: ${giftIds.join(", ")}');
 
-      await updateUserBalance(winner.userId, optimal.unusedStars);
+      // 11. Add any unused stars to the user's balance
+      if (optimal.unusedStars > 0) {
+        await updateUserBalance(winner.userId, optimal.unusedStars);
+      }
     } catch (e, stacktrace) {
       log('❌ Error selecting winner.', error: e, stackTrace: stacktrace);
     }
   }
 
-  /// Select a winner using weighted probability based on:
+  /// Select a winner using weighted probability based on multiple factors:
   /// - Amount contributed (more stars = higher chance)
   /// - Channel/group membership (must be a member)
+  /// - Premium status (small bonus for premium users)
+  /// - Referrals (small bonus for users who bring others)
+  /// - VIP status (small bonus for VIP users)
   /// - Random factor (for fairness)
   Future<_WeightedParticipant> _selectWinnerWithWeightedProbability(
     List<PoolEntry> poolEntries,
@@ -121,7 +126,7 @@ class WinnerSelector {
       for (final user in users) user.userId: user,
     };
 
-    // Filter eligible entries (user must be in channel and group)
+    // Filter eligible entries (user must not be banned or blocked)
     final List<PoolEntry> eligibleEntries =
         poolEntries.where((entry) {
           final user = userMap[entry.userId];
@@ -141,13 +146,33 @@ class WinnerSelector {
       // Base weight from amount contributed (more stars = higher weight)
       double weight = entry.amount.toDouble();
 
+      // Premium status bonus (small bonus for Telegram Premium users)
+      if (user.isPremium) {
+        weight *= 1.03; // 3% bonus for Premium users
+      }
+
       // VIP bonus (optional: give VIP users a slight advantage)
       if (user.isVip) {
         weight *= 1.05; // 5% bonus for VIPs
       }
 
-      // Random factor (adds some unpredictability)
-      // Between 0.9 and 1.1 multiplier
+      // Referral bonus (reward users who bring others)
+      // Using a logarithmic scale to prevent excessive advantage for popular users
+      if (user.totalReferrals > 0) {
+        // Calculate referral bonus factor: up to 5% extra for referrals
+        // Using log base 10 to flatten the curve for users with many referrals
+        final referralFactor =
+            1 + (Math.log(user.totalReferrals + 1) / Math.log(10)) * 0.05;
+        weight *= referralFactor;
+      }
+
+      // Channel/group membership bonus (if they've joined our communities)
+      if (user.hasJoinedChannel && user.hasJoinedGroup) {
+        weight *= 1.02; // 2% bonus for community members
+      }
+
+      // Random factor (adds unpredictability and fairness)
+      // Between 0.9 and 1.1 multiplier (±10% randomness)
       final randomFactor = 0.9 + (_random.nextDouble() * 0.2);
       weight *= randomFactor;
 
@@ -162,8 +187,13 @@ class WinnerSelector {
     // Log weights for debugging
     log('🎯 Weighted probabilities:');
     for (final wp in weightedParticipants) {
+      final user = wp.user;
       log(
-        '  ${wp.user.name} (ID: ${wp.user.userId}): ${wp.weight.toStringAsFixed(2)}',
+        '  ${user.name} (ID: ${user.userId}): ${wp.weight.toStringAsFixed(2)} '
+        '[Stars: ${wp.entry.amount}, '
+        'Premium: ${user.isPremium}, '
+        'VIP: ${user.isVip}, '
+        'Referrals: ${user.totalReferrals}]',
       );
     }
 
@@ -410,4 +440,18 @@ class OptimalGifts {
   const OptimalGifts(this.gifts, this.unusedStars);
   final List<Gift> gifts;
   final int unusedStars;
+}
+
+/// Utility for math operations
+class Math {
+  const Math._();
+
+  /// Logarithm implementation
+  static double log(num x, [num? base]) {
+    if (base == null) {
+      return math.log(x);
+    } else {
+      return math.log(x) / math.log(base);
+    }
+  }
 }
