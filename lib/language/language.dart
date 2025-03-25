@@ -263,4 +263,7 @@ abstract class Language {
 
   /// Terms and conditions
   String get termsAndConditions;
+
+  /// The help message
+  String get helpMessage;
 }

@@ -1,5 +1,6 @@
 import 'package:luckeverydaybot/consts/strings.dart';
 import 'package:luckeverydaybot/handlers/accept_precheck.dart';
+import 'package:luckeverydaybot/handlers/help_handler.dart';
 import 'package:luckeverydaybot/handlers/join_handler.dart';
 import 'package:luckeverydaybot/handlers/language_handler.dart';
 import 'package:luckeverydaybot/handlers/payment_handler.dart';
@@ -43,6 +44,7 @@ void main(List<String> args) async {
   bot.callbackQuery(CallbackQueryData.invite, inviteHandler);
   bot.command('privacy', privacyHandler);
   bot.command('terms', termsHandler);
+  bot.command('help', helpHandler);
 
   await bot.start();
 }

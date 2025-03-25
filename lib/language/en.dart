@@ -434,4 +434,27 @@ By using this bot, you agree to the following terms:
 
 By continuing to use this bot, you acknowledge that you have read, understood, and agree to these terms.
 ''';
+
+  @override
+  String get helpMessage => '''
+*How the Bot Works:*
+• Bot accepts star transactions from users and adds to bot's daily pool.
+• At 11:59 PM GMT, an automated algorithm randomly selects a winner and sends the prize pool worth of Telegram Gifts to them.
+
+**Game Rules:**  
+• The prize pool consists of all user contributions minus 15% service fee.
+• Only one winner is selected per day.  
+• More contributed stars increase the chances of winning.  
+• VIP users, Telegram Premium users, referrals, and our channel/chat members receive extra weightage.  
+• A random probability factor ensures fairness.  
+• If the total gifts don't match the prize pool, the remaining balance stays with the bot and is added to the user's future winnings.
+
+*Available Commands:*
+• /join - To join today's pool
+• /today - To see today's stats
+• /language - To update language preference
+• /settings - To manage profile and preferences
+• /privacy - To see privacy policy
+• /terms - To see terms
+''';
 }
