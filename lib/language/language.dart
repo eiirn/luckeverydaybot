@@ -1,17 +1,19 @@
 import 'en.dart';
+import 'ru.dart';
 
 /// Represents the language pack.
 abstract class Language {
   const Language(this.name, this.code);
 
   factory Language.of(String code) => switch (code) {
-    'en' => English(),
-    _ => English(),
+    'en' => en,
+    'ru' => ru,
+    _ => en,
   };
   final String name;
   final String code;
 
-  static List<Language> availableLanguages() => [en];
+  static List<Language> availableLanguages() => [en, ru];
   static Map<String, Language> languageMap = {
     for (final lang in availableLanguages()) lang.code: lang,
   };
