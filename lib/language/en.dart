@@ -477,4 +477,43 @@ By continuing to use this bot, you acknowledge that you have read, understood, a
   @override
   String get thanksForJoiningChannel =>
       'Welcome to @TheCashSplash! Joining us just boosted your chances of winning!';
+
+  /// Returns a random notification message for inactive users
+  ///
+  /// [hasPlayedBefore] determines whether to use messages for returning players
+  /// or complete newcomers
+  @override
+  String getInactivityReminderMessage(bool hasPlayedBefore) {
+    final List<String> returningPlayerMessages = [
+      "It's been a while! Maybe today is YOUR day. Check today's pool and make your entry! 🌟",
+      "Miss the thrill? Today's prize pool is waiting for you. Your stars could multiply! 💰",
+      'Hey there! The stars have aligned - perfect time to jump back into the draw! ✨',
+      "Your luck might be building up while you're away. Try your chance in today's pool! 🍀",
+      'Remember how close you were last time? Today could be the day you win it all! 🏆',
+      "The prize pool is getting bigger! Don't miss your chance to be today's lucky winner! 💫",
+      'Everyone misses you in the game! Come back and try your luck today. 🎯',
+      'Your stars are waiting to shine! Jump back in and see if luck is on your side today. ⭐',
+      'Feeling lucky? The daily draw is looking for its winner. Could it be you today? 🎰',
+      "We've noticed you've been away. The stars miss you! Come join today's pool! 🌠",
+    ];
+
+    final List<String> newPlayerMessages = [
+      "Ready to try your luck? Join today's pool and you might be tonight's big winner! 🎯",
+      'Your first star entry could win you the entire pool! Why not give it a shot today? 🌟',
+      'New to the game? Today is the perfect day to start your winning journey! 💫',
+      'The stars are aligned for newcomers! Make your first entry today and test your luck. ✨',
+      'Everyone starts somewhere - your first entry could be your first win! Try today! 🏆',
+      "Curious about your luck? Make an entry in today's pool and find out tonight! 🍀",
+      'First-time players have been on a winning streak lately! Join the fun today! 💰',
+      "The daily draw awaits your entry! Start small, win big - that's how it works! ⭐",
+      'Never played before? Today might be the perfect day to discover your lucky stars! 🌠',
+      'Just one entry is all it takes to win the entire pool. Ready to try your luck today? 🎰',
+    ];
+
+    final messageList =
+        hasPlayedBefore ? returningPlayerMessages : newPlayerMessages;
+
+    return messageList[DateTime.now().millisecondsSinceEpoch %
+        (messageList.length)];
+  }
 }

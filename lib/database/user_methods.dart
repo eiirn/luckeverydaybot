@@ -114,4 +114,44 @@ class UserMethods {
       throw Exception('Failed to update user field: $e');
     }
   }
+
+  /// Fetches active users who haven't been updated in 7-15 days and haven't been notified in the last 3 days
+  ///
+  /// Returns a list of [BotUser] objects for users who:
+  /// - Are not banned
+  /// - Are not blocked
+  /// - Were last updated between 7 and 15 days ago
+  /// - Haven't been notified in the last 3 days (or never notified)
+  Future<List<BotUser>> fetchUsersForReminder() async {
+    final now = DateTime.now().toUtc();
+    final fifteenDaysAgo = now.subtract(const Duration(days: 15));
+    final sevenDaysAgo = now.subtract(const Duration(days: 7));
+    final threeDaysAgo = now.subtract(const Duration(days: 3));
+
+    try {
+      final response = await _supabase
+          .from('users')
+          .select()
+          .eq('banned', false)
+          .eq('blocked', false)
+          .gte('updated_at', fifteenDaysAgo.toIso8601String())
+          .lt('updated_at', sevenDaysAgo.toIso8601String())
+          .or(
+            'last_notified.is.null,last_notified.lt.${threeDaysAgo.toIso8601String()}',
+          );
+
+      return response.map(BotUser.fromJson).toList();
+    } catch (e, stack) {
+      // Handle errors appropriately
+      log('Error fetching users for reminder.', error: e, stackTrace: stack);
+      return [];
+    }
+  }
+
+  Future<void> updateLastNotified(int userId) async {
+    await _supabase
+        .from('users')
+        .update({'last_notified': DateTime.now().toUtc().toIso8601String()})
+        .eq('user_id', userId);
+  }
 }

@@ -269,4 +269,7 @@ abstract class Language {
 
   /// Thanks for joining channel
   String get thanksForJoiningChannel;
+
+  /// Retention notification message
+  String getInactivityReminderMessage(bool hasPlayedBefore);
 }
