@@ -161,7 +161,7 @@ Send your first star payment to join today's draw! Good luck! ✨''';
 
   @override
   String drawingInTime(int hours, int minutes) =>
-      '⏰ *Drawing in: ${hours}h ${minutes}m*\n';
+      '⏰ *Drawing in: ${hours}h ${minutes}m*, winner will be announced in @TheCashSplash channel.\n';
 
   @override
   String get beFirstToJoin => '*🎉 Be the first to join today\'s draw! 🎉*';

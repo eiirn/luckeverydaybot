@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 import 'package:televerse/televerse.dart';
 
 import '../consts/strings.dart';
@@ -9,7 +8,7 @@ import '../luckeverydaybot.dart';
 import 'language_handler.dart';
 
 Future<void> startHandler(Context ctx) async {
-  final welcomeImage = InputFile.fromFile(File('assets/welcome.webp'));
+  final welcomeImage = InputFile.fromFileId(CommonData.introFileId);
   int? referredBy;
   if (ctx.args.isNotEmpty) {
     referredBy = int.tryParse(ctx.args.first);
@@ -39,12 +38,13 @@ Future<void> startHandler(Context ctx) async {
 
   try {
     // Attempt to send the message with username
-    await ctx.replyWithPhoto(
+    final msg = await ctx.replyWithPhoto(
       welcomeImage,
       caption: user.lang.welcomeMessage(username),
       parseMode: ParseMode.html,
       replyMarkup: board,
     );
+    log('Photo ID: ${msg.photo?.last.fileId}');
   } catch (e) {
     // Fallback without username if an error occurs
     await ctx.replyWithPhoto(

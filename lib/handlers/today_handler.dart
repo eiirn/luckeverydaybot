@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:televerse/televerse.dart';
 import '../consts/strings.dart';
@@ -35,8 +34,8 @@ Future<void> todayHandler(Context ctx) async {
     log("We now have today's number of users.");
 
     // Calculate prize after commission (15% fee)
-    final prizeAmount = totalPool;
-    log('💰 Prize Amount is $prizeAmount');
+
+    log('💰 Prize Amount is $totalPool');
 
     // Check if this user has already participated today
     final userEntry = entries.singleWhereOrNull((e) => e.userId == user.userId);
@@ -83,7 +82,7 @@ Future<void> todayHandler(Context ctx) async {
       messageBuilder.writeln(user.lang.sendJoinToBePioneer);
     } else {
       // Show current pool size in a visually appealing way
-      messageBuilder.writeln(user.lang.currentPrizePool(prizeAmount));
+      messageBuilder.writeln(user.lang.currentPrizePool(totalPool));
       messageBuilder.writeln(user.lang.participantCount(participantCount));
 
       // Add countdown timer or deadline info
@@ -111,19 +110,22 @@ Future<void> todayHandler(Context ctx) async {
         messageBuilder.writeln(user.lang.improveChances);
       } else {
         // Enticing message for non-participants
-        messageBuilder.writeln(user.lang.notJoinedToday);
-        messageBuilder.writeln(user.lang.dontMissChanceToWin(prizeAmount));
+        messageBuilder.writeln(
+          '${user.lang.notJoinedToday} ${user.lang.dontMissChanceToWin(totalPool)}',
+        );
         messageBuilder.writeln(user.lang.sendJoinToTryLuck);
       }
     }
-    final photo = InputFile.fromFile(File('assets/today.webp'));
+    final photo = InputFile.fromFileId(CommonData.todayPicFileId);
     final keyboard = Keyboard().text('/join').resized().oneTime();
-    await ctx.replyWithPhoto(
+    final msg = await ctx.replyWithPhoto(
       photo,
       caption: messageBuilder.toString(),
       parseMode: ParseMode.markdown,
       replyMarkup: user.totalSpends == 0 ? keyboard : null,
     );
+
+    log('Photo ID: ${msg.photo?.last.fileId}');
     if (userContribution > 0 && !user.hasJoinedChannel) {
       await ctx.reply(
         user.lang.joinCommunitiesTip,

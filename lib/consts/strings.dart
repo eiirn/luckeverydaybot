@@ -32,4 +32,10 @@ class CommonData {
   static final oneTo2500Exp = RegExp(
     r'^(?:[1-9]|[1-9][0-9]{1,2}|1[0-9]{3}|2[0-4][0-9]{2}|2500)$',
   );
+
+  static const todayPicFileId =
+      'AgACAgUAAxkDAAPBZ-RRBEw1oBWBKmICI8fX2JBZQiwAAkPFMRtf1SFXaH1JaxmUP6oBAAMCAAN3AAM2BA';
+
+  static const introFileId =
+      'AgACAgUAAxkDAAO2Z-RKOrQa5AlQibQDHhlEOPrswzEAAjzFMRtf1SFXKeFcwArZ2igBAAMCAAN5AAM2BA';
 }
