@@ -8,7 +8,7 @@ import '../../language/en.dart';
 
 /// Handles displaying the user's VIP status information
 Future<void> vipStatusHandler(Context ctx) async {
-  final user = ctx.user;
+  final user = await ctx.user;
 
   if (user == null) {
     if (ctx.hasCallbackQuery()) {
@@ -70,13 +70,9 @@ Future<void> vipStatusHandler(Context ctx) async {
 
 /// Handles the activation of VIP status by sending an invoice
 Future<void> activateVIPStatusHandler(Context ctx) async {
-  final user = ctx.user;
+  final user = await ctx.user;
 
   if (user == null) {
-    if (ctx.hasCallbackQuery()) {
-      await ctx.answerCallbackQuery();
-    }
-    await ctx.reply(en.createAccountFirst);
     return;
   }
 

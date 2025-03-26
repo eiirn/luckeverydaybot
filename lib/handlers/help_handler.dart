@@ -7,7 +7,7 @@ Future<void> helpHandler(Context ctx) async {
   if (ctx.hasCallbackQuery()) {
     ctx.answerCallbackQuery().ignore();
   }
-  final lang = ctx.user?.lang ?? en;
+  final lang = (await ctx.user)?.lang ?? en;
 
   await ctx.reply(lang.helpMessage, parseMode: ParseMode.markdown);
 }

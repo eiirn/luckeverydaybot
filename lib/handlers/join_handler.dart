@@ -11,7 +11,7 @@ import '../utils/formatting.dart';
 
 /// Handles the /join command which allows users to enter the daily draw
 Future<void> joinHandler(Context ctx) async {
-  final BotUser? user = ctx.user;
+  final BotUser? user = await ctx.user;
 
   // Check if user has an account
   if (user == null) {

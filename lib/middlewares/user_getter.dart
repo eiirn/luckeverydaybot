@@ -1,8 +1,5 @@
 import 'package:televerse/televerse.dart';
-
-import '../database/user_methods.dart';
 import '../language/en.dart';
-import '../luckeverydaybot.dart';
 
 class UserGetter implements Middleware {
   @override
@@ -14,8 +11,6 @@ class UserGetter implements Middleware {
       return;
     }
 
-    final user = await UserMethods(supabase).getUserById(from);
-    ctx.middlewareStorage['user'] = user;
     return next();
   }
 }

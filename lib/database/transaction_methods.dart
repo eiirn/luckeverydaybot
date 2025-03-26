@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:supabase/supabase.dart';
 import '../models/transaction.dart';
 
 /// Class containing methods for managing transactions in Supabase.
 class TransactionMethods {
   /// Constructor that takes a Supabase client.
-  TransactionMethods(this._supabase);
+  const TransactionMethods(this._supabase);
 
   /// The Supabase client instance.
   final SupabaseClient _supabase;
@@ -28,8 +30,9 @@ class TransactionMethods {
               .single();
 
       return Transaction.fromJson(response);
-    } catch (e) {
-      throw Exception('Failed to add transaction: $e');
+    } catch (e, stack) {
+      log('Error while adding transaction', error: e, stackTrace: stack);
+      throw Exception('Failed to add transaction.');
     }
   }
 }

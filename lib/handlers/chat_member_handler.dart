@@ -21,7 +21,7 @@ Future<void> myChatMemberHandler(Context ctx) async {
 
   final isBlocked = newChatMember.status == ChatMemberStatus.kicked;
 
-  final user = ctx.user;
+  final user = await ctx.user;
   if (user == null) {
     return;
   }
@@ -31,7 +31,7 @@ Future<void> myChatMemberHandler(Context ctx) async {
 }
 
 Future<void> chatMemberHandler(Context ctx) async {
-  final user = ctx.user;
+  final user = await ctx.user;
 
   if (user == null) {
     return;

@@ -17,7 +17,7 @@ Future<void> startHandler(Context ctx) async {
 
   // Get the username safely
   final String username = (ctx.from?.firstName ?? 'Winner!').trim();
-  var user = ctx.user;
+  var user = await ctx.user;
   if (user == null) {
     languageHandler(ctx).ignore();
     log('Creating user...');

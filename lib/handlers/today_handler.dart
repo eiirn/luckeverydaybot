@@ -14,8 +14,9 @@ Future<void> todayHandler(Context ctx) async {
   if (ctx.hasCallbackQuery()) {
     ctx.answerCallbackQuery().ignore();
   }
+  ctx.replyWithChatAction(ChatAction.typing).ignore();
 
-  final BotUser? user = ctx.user;
+  final BotUser? user = await ctx.user;
 
   if (user == null) {
     await ctx.reply(en.noAccount);
@@ -23,8 +24,6 @@ Future<void> todayHandler(Context ctx) async {
   }
 
   final poolMethods = PoolMethods(supabase);
-
-  ctx.replyWithChatAction(ChatAction.typing).ignore();
 
   try {
     // Get today's pool stats
@@ -35,8 +34,8 @@ Future<void> todayHandler(Context ctx) async {
     final participantCount = await poolMethods.getTodayUniqueUserCount();
     log("We now have today's number of users.");
 
-    // Calculate prize after commission (assuming 10% fee)
-    final prizeAmount = (totalPool * 0.9).toInt();
+    // Calculate prize after commission (15% fee)
+    final prizeAmount = (totalPool * 0.85).toInt();
     log('💰 Prize Amount is $prizeAmount');
 
     // Check if this user has already participated today
@@ -78,8 +77,9 @@ Future<void> todayHandler(Context ctx) async {
 
       // Special enticing message for empty pool
       messageBuilder.writeln(user.lang.beFirstToJoin);
-      messageBuilder.writeln(user.lang.firstParticipantHighestChance);
-      messageBuilder.writeln(user.lang.startWithLittleAsStars);
+      messageBuilder.writeln(
+        '${user.lang.firstParticipantHighestChance} ${user.lang.startWithLittleAsStars}',
+      );
       messageBuilder.writeln(user.lang.sendJoinToBePioneer);
     } else {
       // Show current pool size in a visually appealing way
@@ -117,10 +117,12 @@ Future<void> todayHandler(Context ctx) async {
       }
     }
     final photo = InputFile.fromFile(File('assets/today.webp'));
+    final keyboard = Keyboard().text('/join').resized().oneTime();
     await ctx.replyWithPhoto(
       photo,
       caption: messageBuilder.toString(),
       parseMode: ParseMode.markdown,
+      replyMarkup: user.totalSpends == 0 ? keyboard : null,
     );
     if (userContribution > 0 && !user.hasJoinedChannel) {
       await ctx.reply(

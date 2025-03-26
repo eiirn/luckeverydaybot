@@ -14,7 +14,7 @@ import '../settings_handler.dart';
 /// It prompts the user for a new name, validates it, and updates it in the database.
 Future<void> updateNameHandler(Context ctx) async {
   // Get the user from middleware storage or create a new one
-  final user = ctx.user;
+  final user = await ctx.user;
   if (user == null) {
     await ctx.answerCallbackQuery();
     await ctx.reply(en.createAccountFirst);

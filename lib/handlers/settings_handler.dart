@@ -9,7 +9,7 @@ Future<void> settingsHandler(
   Context ctx, {
   bool editWithCallback = false,
 }) async {
-  final user = ctx.user;
+  final user = await ctx.user;
 
   if (user == null) {
     await ctx.reply(en.createAccountFirst);

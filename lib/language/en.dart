@@ -17,14 +17,14 @@ class English extends Language {
 
   @override
   String welcomeMessage([String? name]) => '''
-🌟 <b>Welcome to StarLuck Draw${name != null ? ', $name' : ''}!</b> 🌟
+🌟 <b>Welcome to Cash Splash${name != null ? ', $name' : ''}!</b> 🌟
 
-Join our daily lucky draw by sending star payments to this bot. Here's how it works:
+Join daily lucky draw by sending stars to the bot. Here's how it works:
 
 - Send stars to enter the daily draw
 - More stars = higher chance of winning
-- Daily winner selected at 12:00 UTC
-- Winner receives the prize pool (minus 10-15% fee)
+- Daily winner selected at 11:59 PM GMT
+- Winner receives the prize pool (minus 15% fee)
 
 Send your first star payment to join today's draw! Good luck! ✨''';
 
@@ -38,15 +38,14 @@ Send your first star payment to join today's draw! Good luck! ✨''';
   @override
   String get joinInfo =>
       '✨ *DAILY LUCKY DRAW* ✨\n\n'
-      'How many stars would you like to bet today? More stars = higher '
-      ' chance to win!\n\n'
+      'How many stars would you like to add to the pool now? More stars = higher chance to win!\n\n'
       '💰 *Minimum:* 20 Stars\n'
       '💰 *Maximum:* 2500 Stars\n\n'
-      'Today\'s pot is growing! Will you be the lucky winner?';
+      'Today\'s pot is growing! Win big, Amigo!';
 
   @override
   String get joinTimedOut =>
-      '⏱️ Time\'s up! The lucky draw waits for no one.\n'
+      '⏱️ Time\'s up! The lucky draw waits for no one. '
       'Send /join again when you\'re ready to try your luck!';
 
   @override
@@ -160,7 +159,7 @@ Send your first star payment to join today's draw! Good luck! ✨''';
 
   @override
   String get startWithLittleAsStars =>
-      'Start with as little as 10 stars and watch the pool grow.\n';
+      'Start with as little as 20 stars and watch the pool grow.\n';
 
   @override
   String get sendJoinToBePioneer =>

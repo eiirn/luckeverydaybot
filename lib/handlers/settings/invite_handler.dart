@@ -4,7 +4,7 @@ import '../../extensions/user_ext.dart';
 import '../../language/en.dart';
 
 Future<void> inviteHandler(Context ctx) async {
-  final user = ctx.user;
+  final user = await ctx.user;
   if (user == null) {
     await ctx.reply(en.createAccountFirst);
     return;

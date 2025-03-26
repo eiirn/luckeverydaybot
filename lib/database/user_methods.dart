@@ -4,8 +4,12 @@ import 'package:supabase/supabase.dart' hide User;
 import '../models/user.dart';
 
 class UserMethods {
-  const UserMethods(SupabaseClient supabase) : _supabase = supabase;
+  factory UserMethods(SupabaseClient supabase) =>
+      _instance ??= UserMethods._internal(supabase);
+  UserMethods._internal(this._supabase);
   final SupabaseClient _supabase;
+
+  static UserMethods? _instance;
 
   /// Table name in Supabase
   static const String _tableName = 'users';

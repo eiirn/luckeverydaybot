@@ -50,17 +50,43 @@ class BotUser {
     totalReferrals: json['total_referrals'] as int? ?? 0,
   );
 
+  /// The Telegram User ID of the user.
   final int userId;
+
+  /// Name of the user.
   final String name;
+
+  /// Whether the user has been banned to use the bot.
   bool banned;
+
+  /// Whether the user has blocked the bot.
   bool blocked;
+
+  /// Whether teh user has joined the channel
   bool hasJoinedChannel;
+
+  /// Whether the user has joined the group
   bool hasJoinedGroup;
+
+  /// The total number of star won by the user
   int winnings;
+
+  /// Total number of star the uesr has put into daily draws
   int totalSpends;
+
+  /// The user id of the uesr who referred this user.
   int? referredBy;
+
+  /// The date at which the user created their account
   DateTime createdDate;
+
+  /// Whether teh user is a VIP user.
   bool isVip;
+
+  /// The date at which the user has enabled VIP status.
+  ///
+  /// When present, the VIP status will expire after 365 days after this date.
+  /// If null && isVip, user has lifetime access to VIP status.
   DateTime? vipDate;
 
   /// In bot language code

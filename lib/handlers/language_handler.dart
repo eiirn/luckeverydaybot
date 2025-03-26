@@ -11,7 +11,7 @@ import 'start_handler.dart';
 
 /// Handles language selection for users
 Future<void> languageHandler(Context ctx) async {
-  final BotUser? user = ctx.user;
+  final BotUser? user = await ctx.user;
 
   // Create a dynamic keyboard based on available languages
   var keyboard = InlineKeyboard();
@@ -55,7 +55,7 @@ Future<void> languageHandler(Context ctx) async {
 }
 
 Future<void> setLanguageHandler(Context ctx) async {
-  final user = ctx.user;
+  final user = await ctx.user;
 
   if (user == null) {
     // This is unexpected, but handle it gracefully

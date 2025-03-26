@@ -46,7 +46,7 @@ Future<void> paymentHandler(Context ctx) async {
 
   // Get user information
   final String username = (ctx.from?.firstName ?? 'Winner!').trim();
-  BotUser? user = ctx.user;
+  BotUser? user = await ctx.user;
   if (user == null) {
     log('Creating user account!');
     user = await UserMethods(
@@ -79,7 +79,9 @@ Future<void> _processVipStatusPayment(Context ctx) async {
 
   final methods = UserMethods(supabase);
   try {
-    final user = await methods.updateUser(ctx.user!.copyWith(isVip: true));
+    final user = await methods.updateUser(
+      (await ctx.user)!.copyWith(isVip: true),
+    );
     await ctx.reply(user.lang.activatedVip, parseMode: ParseMode.markdown);
   } catch (err, stack) {
     log(
