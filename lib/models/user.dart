@@ -21,7 +21,9 @@ class BotUser {
     this.isPremium = false,
     this.language,
     this.totalReferrals = 0,
-  }) : createdDate = createdDate ?? DateTime.now().toUtc();
+    DateTime? updatedAt,
+  }) : createdDate = createdDate ?? DateTime.now().toUtc(),
+       updatedAt = updatedAt ?? DateTime.now().toUtc();
 
   /// Create a User instance from a JSON map (for when fetching from Supabase)
   factory BotUser.fromJson(Map<String, dynamic> json) => BotUser(
@@ -48,6 +50,10 @@ class BotUser {
     isPremium: json['is_premium'] as bool? ?? false,
     language: json['language'] as String?,
     totalReferrals: json['total_referrals'] as int? ?? 0,
+    updatedAt:
+        json['updated_at'] != null
+            ? DateTime.parse(json['updated_at'] as String)
+            : null,
   );
 
   /// The Telegram User ID of the user.
@@ -104,6 +110,9 @@ class BotUser {
   /// Total referrals
   final int totalReferrals;
 
+  /// Last updated
+  final DateTime updatedAt;
+
   /// Convert User instance to a JSON map (for when storing in Supabase)
   Map<String, dynamic> toJson() => {
     'user_id': userId,
@@ -123,6 +132,7 @@ class BotUser {
     'is_premium': isPremium,
     'language': language,
     'total_referrals': totalReferrals,
+    'updated_at': updatedAt.toIso8601String(),
   };
 
   /// Copy with method for creating a new instance with updated fields
@@ -144,6 +154,7 @@ class BotUser {
     bool? isPremium,
     String? language,
     int? totalReferrals,
+    DateTime? updatedAt,
   }) => BotUser(
     userId: userId ?? this.userId,
     name: name ?? this.name,
@@ -162,6 +173,7 @@ class BotUser {
     isPremium: isPremium ?? this.isPremium,
     language: language ?? this.language,
     totalReferrals: totalReferrals ?? this.totalReferrals,
+    updatedAt: updatedAt ?? this.updatedAt,
   );
 
   /// Get the user's language pack.
