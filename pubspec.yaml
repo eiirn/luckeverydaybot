@@ -9,7 +9,7 @@ dependencies:
   cron: ^0.6.1
   intl: ^0.20.2
   supabase: ^2.6.3
-  televerse: ^2.4.4
+  televerse: ^2.4.5
 
 dev_dependencies:
   lints: ^5.0.0
