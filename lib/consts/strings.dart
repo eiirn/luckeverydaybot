@@ -28,4 +28,8 @@ class CommonData {
 
   static const groupId = -1002602158964;
   static const channelId = -1002697838093;
+
+  static final oneTo2500Exp = RegExp(
+    r'^(?:[1-9]|[1-9][0-9]{1,2}|1[0-9]{3}|2[0-4][0-9]{2}|2500)$',
+  );
 }

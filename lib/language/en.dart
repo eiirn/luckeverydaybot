@@ -70,17 +70,7 @@ Send your first star payment to join today's draw! Good luck! ✨''';
 
   @override
   String get betweenTwentyAnd2500 =>
-      '❌ Your bet must be between 20 and 2500 stars!\n'
-      'Send /join again to place a valid bet.';
-
-  @override
-  String excitingNews(int starCount, String potDisplay) =>
-      '🌟 *EXCITING NEWS!* 🌟\n\n'
-      'You\'re about to join today\'s lucky draw with '
-      '*${formatStarAmount(starCount)} stars*!\n\n'
-      'The pot is currently at *$potDisplay stars* and growing! 💰\n\n'
-      'Complete the star transaction now to secure your chance at winning '
-      'the JACKPOT! 🎰';
+      '❌ Please choose between 20 and 2500 stars! Send /join again to place a valid bet.';
 
   @override
   String get invoiceTitle => '🎲 Lucky Draw Entry';
@@ -89,9 +79,32 @@ Send your first star payment to join today's draw! Good luck! ✨''';
   String get invoiceLabel => 'Lucky Draw Entry';
 
   @override
-  String invoiceDescription(int starCount) =>
-      'Place ${formatStarAmount(starCount)} stars in today\'s lucky draw '
-      'for a chance to win big!';
+  String invoiceDescription(int starCount) {
+    final descriptions = [
+      'Place ${formatStarAmount(starCount)} in today\'s lucky draw for a chance to win big!',
+
+      'Entry of ${formatStarAmount(starCount)} for today\'s Cash Splash lucky draw.',
+
+      'Your ${formatStarAmount(starCount)} star ticket to tonight\'s jackpot draw.',
+
+      '${formatStarAmount(starCount)} for today\'s lucky draw. May fortune smile upon you!',
+
+      'Join today\'s lucky draw with ${formatStarAmount(starCount)}. One winner takes all tonight!',
+
+      'Lucky draw entry: ${formatStarAmount(starCount)}. Drawing happens at 11:59 PM UTC.',
+
+      'Place ${formatStarAmount(starCount)} in the pot for tonight\'s lucky draw selection.',
+
+      'Daily draw entry: ${formatStarAmount(starCount)}. More = higher chance to win!',
+
+      'Your ${formatStarAmount(starCount)} star contribution to today\'s lucky prize pool.',
+
+      'Cash Splash lucky draw: ${formatStarAmount(starCount)}. Winner announced at 11:59 PM UTC.',
+    ];
+
+    return descriptions[DateTime.now().millisecondsSinceEpoch %
+        descriptions.length];
+  }
 
   @override
   String errorRegisteringTransaction(String transactionId) =>
@@ -113,10 +126,10 @@ Send your first star payment to join today's draw! Good luck! ✨''';
     int noOfTransactions,
     String timeString,
   ) =>
-      '🎯 *Great bet!* You\'ve added $amount stars to today,\'s draw!\n\n'
-      '💰 Your total contribution today: *$entryAmount stars* ($noOfTransactions transactions)\n'
-      '⏱ Next draw in: *$timeString*\n\n'
-      'The more stars you contribute, the higher your chances of winning! Use /join to place another bet or /today to see today\'s pool.';
+      '🎯 *Locked in!* +$amount stars added.\n'
+      '⏱ Next draw: *$timeString*\n'
+      '🏆 Winner will be announced in @TheCashSplash\n\n'
+      'More stars = higher chances! /join to bet again, /today to see pool.';
 
   @override
   String get paymentError =>

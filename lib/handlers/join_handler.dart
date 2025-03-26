@@ -1,13 +1,9 @@
-import 'package:televerse/telegram.dart';
 import 'package:televerse/televerse.dart';
-
-import '../consts/strings.dart';
-import '../database/pool_methods.dart';
 import '../extensions/user_ext.dart';
 import '../language/en.dart';
 import '../luckeverydaybot.dart';
 import '../models/user.dart';
-import '../utils/formatting.dart';
+import 'invoice_sender.dart';
 
 /// Handles the /join command which allows users to enter the daily draw
 Future<void> joinHandler(Context ctx) async {
@@ -61,66 +57,12 @@ Future<void> joinHandler(Context ctx) async {
     return;
   }
 
-  var responseText = response.data.msg!.text!;
+  final responseText = response.data.msg!.text!;
 
-  // Handle custom amount option
-  if (responseText == user.lang.customAmount) {
-    await ctx.reply(
-      user.lang.customAmountPrompt,
-      parseMode: ParseMode.markdown,
-    );
-
-    // Wait for custom amount
-    final customResponse = await conv.waitForTextMessage(
-      chatId: ctx.id,
-      config: const ConversationConfig(timeout: Duration(minutes: 2)),
-    );
-
-    // Handle timeout for custom amount
-    if (customResponse is ConversationFailure) {
-      await ctx.reply(user.lang.timeoutStringTwo);
-      return;
-    }
-
-    if (customResponse is! ConversationSuccess<Context>) {
-      await ctx.reply(user.lang.somethingWentWrong);
-      return;
-    }
-
-    responseText = customResponse.data.msg!.text!;
-  }
-
-  // Parse and validate star count
-  final starCount = int.tryParse(responseText);
-
-  if (starCount == null) {
-    await ctx.reply(user.lang.nan);
+  if (responseText != user.lang.customAmount) {
+    await invoiceSender(response.data);
     return;
   }
 
-  if (starCount < 20 || starCount > 2500) {
-    await ctx.reply(user.lang.betweenTwentyAnd2500);
-    return;
-  }
-
-  // Get current pot size for added excitement
-  final todaysPot = await PoolMethods(supabase).getTodayPoolTotal();
-  final potDisplay = formatStarAmount(
-    todaysPot + starCount,
-  ); // Add your stars to show potential pot
-
-  // Send exciting confirmation and invoice
-  await ctx.reply(
-    user.lang.excitingNews(starCount, potDisplay),
-    parseMode: ParseMode.markdown,
-  );
-
-  // Send the invoice
-  await ctx.sendInvoice(
-    title: user.lang.invoiceTitle,
-    description: user.lang.invoiceDescription(starCount),
-    payload: PayloadData.betPaylod,
-    currency: CommonData.currency,
-    prices: [LabeledPrice(label: user.lang.invoiceLabel, amount: starCount)],
-  );
+  await customAmountHandler(ctx, user: user);
 }

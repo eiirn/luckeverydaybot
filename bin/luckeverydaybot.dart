@@ -2,6 +2,7 @@ import 'package:luckeverydaybot/consts/strings.dart';
 import 'package:luckeverydaybot/handlers/accept_precheck.dart';
 import 'package:luckeverydaybot/handlers/chat_member_handler.dart';
 import 'package:luckeverydaybot/handlers/help_handler.dart';
+import 'package:luckeverydaybot/handlers/invoice_sender.dart';
 import 'package:luckeverydaybot/handlers/join_handler.dart';
 import 'package:luckeverydaybot/handlers/language_handler.dart';
 import 'package:luckeverydaybot/handlers/payment_handler.dart';
@@ -49,6 +50,7 @@ void main(List<String> args) async {
   bot.callbackQuery(CallbackQueryData.help, helpHandler);
   bot.onMyChatMember(myChatMemberHandler);
   bot.onChatMember(chatMemberHandler);
+  bot.hears(CommonData.oneTo2500Exp, invoiceSender);
 
   await bot.start();
 }

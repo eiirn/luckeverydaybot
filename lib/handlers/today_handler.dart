@@ -35,7 +35,7 @@ Future<void> todayHandler(Context ctx) async {
     log("We now have today's number of users.");
 
     // Calculate prize after commission (15% fee)
-    final prizeAmount = (totalPool * 0.85).toInt();
+    final prizeAmount = totalPool;
     log('💰 Prize Amount is $prizeAmount');
 
     // Check if this user has already participated today

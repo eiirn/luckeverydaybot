@@ -45,8 +45,8 @@ Future<void> paymentHandler(Context ctx) async {
   }
 
   // Get user information
-  final String username = (ctx.from?.firstName ?? 'Winner!').trim();
   BotUser? user = await ctx.user;
+  final String username = (user?.name ?? 'Player!').trim();
   if (user == null) {
     log('Creating user account!');
     user = await UserMethods(

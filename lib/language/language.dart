@@ -49,9 +49,6 @@ abstract class Language {
   /// Bet must be between 20-2500
   String get betweenTwentyAnd2500;
 
-  /// Exciting news generator
-  String excitingNews(int starCount, String potDisplay);
-
   /// Invoice title
   String get invoiceTitle;
 
