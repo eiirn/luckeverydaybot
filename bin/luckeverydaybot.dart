@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:luckeverydaybot/consts/consts.dart';
 import 'package:luckeverydaybot/handlers/accept_precheck.dart';
 import 'package:luckeverydaybot/handlers/chat_member_handler.dart';
@@ -18,9 +21,13 @@ import 'package:luckeverydaybot/luckeverydaybot.dart';
 import 'package:luckeverydaybot/middlewares/user_getter.dart';
 import 'package:luckeverydaybot/scheduled/task.dart';
 import 'package:luckeverydaybot/utils/env_reader.dart';
+import 'package:shelf/shelf.dart';
+import 'package:shelf/shelf_io.dart' as shelf_io;
 
 void main(List<String> args) async {
   await EnvReader.initialize();
+  // Config and start server.
+  final app = initBot();
 
   // Initialize scheduler
   final scheduler = TaskScheduler(supabase: supabase);
@@ -53,6 +60,15 @@ void main(List<String> args) async {
   bot.onChatMember(chatMemberHandler);
   bot.hears(CommonData.oneTo2500Exp, invoiceSender);
   bot.onError(handleError);
+
+  final pipeline = const Pipeline()
+      .addMiddleware(logRequests())
+      .addHandler(app.call);
+
+  final addr = InternetAddress.anyIPv4;
+  final server = await shelf_io.serve(pipeline, addr, 8081);
+
+  log('Server running on port ${server.port}');
 
   await bot.start();
 }

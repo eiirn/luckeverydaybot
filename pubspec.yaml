@@ -8,8 +8,11 @@ environment:
 dependencies:
   cron: ^0.6.1
   intl: ^0.20.2
+  shelf: ^1.4.2
+  shelf_router: ^1.1.4
   supabase: ^2.6.3
   televerse: ^2.4.5
+  televerse_shelf: ^1.2.0
 
 dev_dependencies:
   lints: ^5.0.0
