@@ -1,4 +1,4 @@
-import 'package:luckeverydaybot/consts/strings.dart';
+import 'package:luckeverydaybot/consts/consts.dart';
 import 'package:luckeverydaybot/handlers/accept_precheck.dart';
 import 'package:luckeverydaybot/handlers/chat_member_handler.dart';
 import 'package:luckeverydaybot/handlers/help_handler.dart';

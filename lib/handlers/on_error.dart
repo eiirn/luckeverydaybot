@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:televerse/televerse.dart';
 
-import '../consts/strings.dart';
+import '../consts/consts.dart';
 import '../luckeverydaybot.dart';
 
 Future<void> handleError(BotError<Context> err) async {

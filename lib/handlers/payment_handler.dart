@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:televerse/telegram.dart';
 import 'package:televerse/televerse.dart';
-import '../consts/strings.dart';
+import '../consts/consts.dart';
 import '../database/pool_methods.dart';
 import '../database/transaction_methods.dart';
 import '../database/user_methods.dart';

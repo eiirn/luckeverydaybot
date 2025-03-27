@@ -1,6 +1,6 @@
 import 'package:televerse/televerse.dart';
 
-import '../consts/strings.dart';
+import '../consts/consts.dart';
 import '../extensions/user_ext.dart';
 import '../language/en.dart';
 

@@ -1,6 +1,6 @@
 import 'package:televerse/televerse.dart';
 
-import '../consts/strings.dart';
+import '../consts/consts.dart';
 import '../database/user_methods.dart';
 import '../extensions/user_ext.dart';
 import '../luckeverydaybot.dart';

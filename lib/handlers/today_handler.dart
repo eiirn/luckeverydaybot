@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:televerse/televerse.dart';
-import '../consts/strings.dart';
+import '../consts/consts.dart';
 import '../database/pool_methods.dart';
 import '../extensions/single_where_or_null.dart';
 import '../extensions/user_ext.dart';

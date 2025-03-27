@@ -6,7 +6,7 @@ import 'dart:math' as math;
 import 'package:supabase/supabase.dart';
 import 'package:televerse/telegram.dart';
 import 'package:televerse/televerse.dart';
-import '../consts/strings.dart';
+import '../consts/consts.dart';
 import '../language/en.dart';
 import '../luckeverydaybot.dart';
 import '../models/pool_entry.dart';

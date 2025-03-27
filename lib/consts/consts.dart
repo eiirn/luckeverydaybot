@@ -47,10 +47,11 @@ class DebugGroup {
   static ChatID get chatId => const ChatID(id);
 
   static const id = -1002644458430;
-  static const threads = _Threads(9);
+  static const threads = _Threads(9, 41);
 }
 
 class _Threads {
-  const _Threads(this.logs);
+  const _Threads(this.logs, this.paymentIssues);
   final int logs;
+  final int paymentIssues;
 }
