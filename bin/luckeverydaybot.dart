@@ -60,6 +60,7 @@ void main(List<String> args) async {
   bot.onChatMember(chatMemberHandler);
   bot.hears(CommonData.oneTo2500Exp, invoiceSender);
   bot.onError(handleError);
+  bot.command('invite', inviteHandler);
 
   final pipeline = const Pipeline()
       .addMiddleware(logRequests())
