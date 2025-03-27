@@ -50,18 +50,6 @@ jobs:
             type=semver,pattern={{major}}
             type=sha,format=short
 
-      # Create .env file from secrets if needed
-      - name: Create .env file
-        env:
-          ENV_CONTENT: ${{ secrets.ENV_FILE_CONTENT }}
-        run: |
-          if [ -n "$ENV_CONTENT" ]; then
-            echo "$ENV_CONTENT" > .env
-            echo "Created .env file from secrets"
-          else
-            echo "No ENV_FILE_CONTENT secret found, skipping .env creation"
-          fi
-
       # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v4

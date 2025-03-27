@@ -25,7 +25,7 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 
 void main(List<String> args) async {
-  await EnvReader.initialize();
+  EnvReader.initialize();
   // Config and start server.
   final app = initBot();
 

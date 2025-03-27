@@ -52,10 +52,9 @@ Future<void> todayHandler(Context ctx) async {
     if (totalPool == 0 || participantCount == 0) {
       messageBuilder.writeln(user.lang.todayEmptyPool);
       messageBuilder.writeln(user.lang.todayEmptyPeople);
-
       // Add countdown timer info
       final now = DateTime.now().toUtc();
-      final drawTime = DateTime.utc(
+      final todayDrawTime = DateTime.utc(
         now.year,
         now.month,
         now.day,
@@ -63,9 +62,9 @@ Future<void> todayHandler(Context ctx) async {
         59,
       ); // 23:59 UTC
       final targetDrawTime =
-          now.hour >= 23 && now.minute >= 59
-              ? drawTime.add(const Duration(days: 1))
-              : drawTime;
+          now.isAfter(todayDrawTime)
+              ? todayDrawTime.add(const Duration(days: 1))
+              : todayDrawTime;
       final timeRemaining = targetDrawTime.difference(now);
       final hoursRemaining = timeRemaining.inHours;
       final minutesRemaining = timeRemaining.inMinutes % 60;

@@ -32,9 +32,6 @@ COPY --from=build /app/bin/luckeverydaybot /app/bin/luckeverydaybot
 # Create a directory for configurations
 RUN mkdir -p /app/config
 
-# Copy .env file to the project root if present at build time
-COPY --from=build /app/.env* /app/
-
 # Create a non-root user to run the application
 RUN useradd -m bot && \
     chown -R bot:bot /app
