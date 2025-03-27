@@ -516,4 +516,8 @@ By continuing to use this bot, you acknowledge that you have read, understood, a
     return messageList[DateTime.now().millisecondsSinceEpoch %
         (messageList.length)];
   }
+
+  @override
+  String get onlyOnePlayer =>
+      "Since you were the only participant in today's pool, we're refunding your entire contribution. Better luck finding competitors tomorrow!";
 }

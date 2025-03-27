@@ -518,6 +518,10 @@ class Russian extends Language {
         (messageList.length)];
   }
 
+  @override
+  String get onlyOnePlayer =>
+      'Так как вы были единственным участником в сегодняшнем розыгрыше, мы возвращаем вам всю вашу ставку. Надеемся, завтра у вас появятся соперники!';
+
   /// Helper function for Russian plural forms
   String _getPluralForm(int count, List<String> forms) {
     if (count % 10 == 1 && count % 100 != 11) {

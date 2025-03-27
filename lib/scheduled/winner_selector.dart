@@ -7,10 +7,12 @@ import 'package:supabase/supabase.dart';
 import 'package:televerse/telegram.dart';
 import 'package:televerse/televerse.dart';
 import '../consts/strings.dart';
+import '../language/en.dart';
 import '../luckeverydaybot.dart';
 import '../models/pool_entry.dart';
 import '../models/user.dart';
 import '../utils/formatting.dart';
+import '../utils/logger.dart';
 
 /// Selects a winner from the daily pool and distributes the prize
 class WinnerSelector {
@@ -27,7 +29,7 @@ class WinnerSelector {
     // Get the date in the format used by the database (DD-MM-YYYY)
     final targetDate = date ?? getCurrentDate();
 
-    log('🎲 Running winner selection for date: $targetDate');
+    BotLogger.log('🎲 Running winner selection for date: $targetDate').ignore();
 
     try {
       // 1. Fetch all pool entries for the target date
@@ -114,7 +116,11 @@ class WinnerSelector {
           parseMode: ParseMode.markdown,
         );
       } catch (err, stack) {
-        log('Error while posting on channel', error: err, stackTrace: stack);
+        BotLogger.log(
+          'Error while posting on channel',
+          error: err,
+          stackTrace: stack,
+        ).ignore();
       }
       try {
         if (hasBeenReferred) {
@@ -133,7 +139,11 @@ class WinnerSelector {
           );
         }
       } catch (err, stack) {
-        log('Error while posting on channel', error: err, stackTrace: stack);
+        BotLogger.log(
+          'Error while posting on channel',
+          error: err,
+          stackTrace: stack,
+        ).ignore();
       }
 
       // 8. Get available gifts from Telegram API
@@ -193,15 +203,25 @@ class WinnerSelector {
             parseMode: ParseMode.markdown,
           );
         } catch (e, stack) {
-          log(
+          BotLogger.log(
             'Failed to notify referrer about commission.',
             error: e,
             stackTrace: stack,
-          );
+          ).ignore();
         }
       }
     } catch (e, stacktrace) {
-      log('❌ Error selecting winner.', error: e, stackTrace: stacktrace);
+      if (e is OnlyParticipantException) {
+        BotLogger.log(
+          '✅ There was only one player in the pool. So we refuneded.',
+        ).ignore();
+        return;
+      }
+      BotLogger.log(
+        '❌ Error selecting winner.',
+        error: e,
+        stackTrace: stacktrace,
+      ).ignore();
     }
   }
 
@@ -230,6 +250,29 @@ class WinnerSelector {
 
     if (eligibleEntries.isEmpty) {
       throw Exception('No eligible participants found for winner selection');
+    }
+
+    if (eligibleEntries.length == 1) {
+      try {
+        await api.sendMessage(
+          ChatID(eligibleEntries.first.userId),
+          (userMap[eligibleEntries.first.userId]?.lang ?? en).onlyOnePlayer,
+        );
+        for (var i = 0; i < eligibleEntries.first.transactionIds.length; i++) {
+          await api.refundStarPayment(
+            userId: eligibleEntries.first.userId,
+            telegramPaymentChargeId: eligibleEntries.first.transactionIds[i],
+          );
+          await Future.delayed(const Duration(seconds: 8));
+        }
+      } catch (err, stack) {
+        BotLogger.log(
+          'Error while refunding.',
+          error: err,
+          stackTrace: stack,
+        ).ignore();
+      }
+      throw OnlyParticipantException();
     }
 
     // Calculate weights for each eligible entry
@@ -569,3 +612,6 @@ class Math {
     }
   }
 }
+
+/// Only participant exception
+class OnlyParticipantException implements Exception {}

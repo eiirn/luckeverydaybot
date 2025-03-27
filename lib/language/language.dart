@@ -274,4 +274,7 @@ abstract class Language {
 
   /// Retention notification message
   String getInactivityReminderMessage(bool hasPlayedBefore);
+
+  /// Only player, refund statement
+  String get onlyOnePlayer;
 }

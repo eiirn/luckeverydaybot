@@ -8,6 +8,10 @@ import '../luckeverydaybot.dart';
 Future<void> myChatMemberHandler(Context ctx) async {
   final newChatMember = ctx.chatMemberUpdated!.newChatMember;
 
+  if (ctx.chat!.id == DebugGroup.id) {
+    return;
+  }
+
   if (ctx.chat != null && ctx.chat!.type != ChatType.private) {
     if (newChatMember.status == ChatMemberStatus.member) {
       await ctx.reply(

@@ -1,3 +1,5 @@
+import 'package:televerse/televerse.dart';
+
 class CallbackQueryData {
   const CallbackQueryData._();
 
@@ -38,4 +40,17 @@ class CommonData {
 
   static const introFileId =
       'AgACAgUAAxkDAAO2Z-RKOrQa5AlQibQDHhlEOPrswzEAAjzFMRtf1SFXKeFcwArZ2igBAAMCAAN5AAM2BA';
+}
+
+class DebugGroup {
+  const DebugGroup._();
+  static ChatID get chatId => const ChatID(id);
+
+  static const id = -1002644458430;
+  static const threads = _Threads(9);
+}
+
+class _Threads {
+  const _Threads(this.logs);
+  final int logs;
 }
