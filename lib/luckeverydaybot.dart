@@ -13,7 +13,6 @@ import 'utils/env_reader.dart';
 
 // Bot configuration
 final token = EnvReader.getRequired('BOT_TOKEN');
-final adminIds = EnvReader.getIntList('BOT_ADMIN_IDS');
 
 // Initialize bot
 final api = RawAPI(token);

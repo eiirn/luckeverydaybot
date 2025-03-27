@@ -1,19 +1,23 @@
 import 'dart:developer';
 import 'dart:io';
 
-/// A simple environment variable reader that reads from .env file
-/// and falls back to system environment variables if not found in .env
+/// A simple environment variable reader that reads from system environment variables
+/// and falls back to the .env file if not found in system environment
 class EnvReader {
   EnvReader._();
   static final Map<String, String> _envVars = {};
   static bool _initialized = false;
 
-  /// Initialize the environment variables from .env file
+  /// Initialize the environment variables from .env file (only if running locally)
   static Future<void> initialize() async {
     if (_initialized) {
       return;
     }
 
+    // Use system environment variables first
+    _envVars.addAll(Platform.environment);
+
+    // Try loading from .env only if it exists (for local development)
     try {
       final file = File('.env');
       if (file.existsSync()) {
@@ -30,7 +34,8 @@ class EnvReader {
             final key = parts[0].trim();
             // Join the rest in case value contains '=' character
             final value = parts.sublist(1).join('=').trim();
-            _envVars[key] = value;
+            // Only set if not already in system environment
+            _envVars.putIfAbsent(key, () => value);
           }
         }
       }
@@ -40,33 +45,9 @@ class EnvReader {
     }
   }
 
-  /// Get an environment variable, first looking in the .env file
-  /// and then falling back to system environment variables
-  static String? get(String key) {
-    // Check if initialized, initialize synchronously if not
-    if (!_initialized) {
-      final file = File('.env');
-      if (file.existsSync()) {
-        final lines = file.readAsLinesSync();
-        for (final line in lines) {
-          if (line.trim().isEmpty || line.trim().startsWith('#')) {
-            continue;
-          }
-
-          final parts = line.split('=');
-          if (parts.length >= 2) {
-            final key = parts[0].trim();
-            final value = parts.sublist(1).join('=').trim();
-            _envVars[key] = value;
-          }
-        }
-      }
-      _initialized = true;
-    }
-
-    // Return from .env file or system environment
-    return _envVars[key] ?? Platform.environment[key];
-  }
+  /// Get an environment variable, first looking in system environment
+  /// and then falling back to .env file if not found
+  static String? get(String key) => _envVars[key];
 
   /// Get a required environment variable, throws if not found
   static String getRequired(String key) {
@@ -75,38 +56,5 @@ class EnvReader {
       throw Exception('Required environment variable $key not found');
     }
     return value;
-  }
-
-  /// Get an integer value from environment
-  static int getInt(String key, {int defaultValue = 0}) {
-    final value = get(key);
-    if (value == null) {
-      return defaultValue;
-    }
-    return int.tryParse(value) ?? defaultValue;
-  }
-
-  /// Get a boolean value from environment
-  static bool getBool(String key, {bool defaultValue = false}) {
-    final value = get(key);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value.toLowerCase() == 'true';
-  }
-
-  /// Get a list of values (comma separated) from environment
-  static List<String> getList(String key, {String separator = ','}) {
-    final value = get(key);
-    if (value == null) {
-      return [];
-    }
-    return value.split(separator).map((e) => e.trim()).toList();
-  }
-
-  /// Get a list of integers from environment
-  static List<int> getIntList(String key, {String separator = ','}) {
-    final list = getList(key, separator: separator);
-    return list.map((e) => int.tryParse(e) ?? 0).toList();
   }
 }
