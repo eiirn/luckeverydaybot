@@ -11,6 +11,7 @@ import '../language/en.dart';
 import '../luckeverydaybot.dart';
 import '../models/transaction.dart';
 import '../models/user.dart';
+import '../utils/logger.dart';
 
 /// A handler that processes star transactions made by users.
 ///
@@ -39,7 +40,20 @@ Future<void> paymentHandler(Context ctx) async {
   // Record the transaction regardless of further processing
   try {
     await TransactionMethods(supabase).addTransaction(transaction);
-  } catch (e) {
+  } catch (err, stack) {
+    BotLogger.log(
+      '💰 Error while registering transaction.\n'
+      'ID: $userId\n'
+      'Amount: ${transaction.amount}\n\n'
+      'TRXN: \n``\n${transaction.transactionId}```',
+      error: err,
+      stackTrace: stack,
+      thread: DebugGroup.threads.paymentIssues,
+      board: InlineKeyboard()
+          .copyText('Copy User ID', copyText: userId.toString())
+          .row()
+          .copyText('Copy TRXN ID', copyText: transaction.transactionId),
+    ).ignore();
     await ctx.reply(en.errorRegisteringTransaction(transaction.transactionId));
     return;
   }
@@ -49,9 +63,11 @@ Future<void> paymentHandler(Context ctx) async {
   final String username = (user?.name ?? 'Player!').trim();
   if (user == null) {
     log('Creating user account!');
-    user = await UserMethods(
-      supabase,
-    ).createUser(userId: ctx.from!.id, name: username);
+    user = await UserMethods(supabase).createUser(
+      userId: ctx.from!.id,
+      name: username,
+      langauge: ctx.from!.languageCode,
+    );
     log('User created ${user.userId}!');
   }
 
@@ -64,6 +80,13 @@ Future<void> paymentHandler(Context ctx) async {
     await _processVipStatusPayment(ctx);
   } else {
     await ctx.reply(user.lang.unknownPayment(transaction.amount));
+    BotLogger.log(
+      '💰 Unknown payment is received.\n'
+      'ID: ${user.userId}\n'
+      'Amount: ${transaction.amount}\n\n'
+      'TRXN: ```\n${transaction.transactionId}```',
+      thread: DebugGroup.threads.paymentIssues,
+    ).ignore();
   }
 }
 

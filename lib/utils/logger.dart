@@ -11,6 +11,7 @@ class BotLogger {
     Object? error,
     StackTrace? stackTrace,
     int? thread,
+    InlineKeyboard? board,
   }) async {
     dev.log('$obj', error: error, stackTrace: stackTrace);
     try {
@@ -19,6 +20,7 @@ class BotLogger {
         '$obj',
         parseMode: ParseMode.markdown,
         messageThreadId: thread ?? DebugGroup.threads.logs,
+        replyMarkup: board,
       );
       if (error != null) {
         await api.sendMessage(
