@@ -106,8 +106,10 @@ class WinnerSelector {
 
       // Announce the winner.
       try {
+        const channel = ChatID(CommonData.channelId);
+        await api.sendDice(channel, emoji: DiceEmoji.slotMachine);
         await api.sendMessage(
-          const ChatID(CommonData.channelId),
+          channel,
           "🎉 *WINNER ANNOUNCEMENT* 🎉\n\n🏆 Congratulations to *${winner.name}* ${winner.isVip ? '🎖️ ' : ''}for winning today's lucky draw!\n\n🦄 Winner ID: ${winner.userId}\n💰 Prize: *$prizeAmount stars*\n📊 Total pool: *$totalPool stars*\n\nThe more stars you contribute, the higher your chances to win. Will YOU be our next lucky winner? 🍀",
           replyMarkup: InlineKeyboard().addUrl(
             'Join next round',
