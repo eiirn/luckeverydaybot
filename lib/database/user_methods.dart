@@ -19,6 +19,7 @@ class UserMethods {
   Future<BotUser> createUser({
     required int userId,
     required String name,
+    required bool isPremium,
     int? referralId,
     String? langauge,
   }) async {
@@ -35,6 +36,7 @@ class UserMethods {
         name: name,
         referredBy: referralId,
         language: langauge,
+        isPremium: isPremium,
       );
 
       // Insert the new user into the database

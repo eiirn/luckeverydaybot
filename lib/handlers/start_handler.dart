@@ -25,6 +25,7 @@ Future<void> startHandler(Context ctx) async {
       name: username,
       referralId: referredBy,
       langauge: ctx.from?.languageCode,
+      isPremium: ctx.from?.isPremium ?? false,
     );
     log('User created ${user.userId}!');
     return;

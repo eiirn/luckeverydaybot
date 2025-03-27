@@ -18,7 +18,7 @@ import 'package:luckeverydaybot/handlers/settings_handler.dart';
 import 'package:luckeverydaybot/handlers/start_handler.dart';
 import 'package:luckeverydaybot/handlers/today_handler.dart';
 import 'package:luckeverydaybot/luckeverydaybot.dart';
-import 'package:luckeverydaybot/middlewares/user_getter.dart';
+import 'package:luckeverydaybot/middlewares/user_handling.dart';
 import 'package:luckeverydaybot/scheduled/task.dart';
 import 'package:luckeverydaybot/utils/env_reader.dart';
 import 'package:shelf/shelf.dart';
@@ -37,7 +37,7 @@ void main(List<String> args) async {
     await scheduler.runWinnerSelectionManually();
   }
 
-  bot.use(UserGetter());
+  bot.use(UserMiddleware());
   bot.callbackQuery(CallbackQueryData.languageExp, setLanguageHandler);
   bot.command('start', startHandler);
   bot.command('today', todayHandler);

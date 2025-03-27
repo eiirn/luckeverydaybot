@@ -5,5 +5,8 @@ import '../luckeverydaybot.dart';
 import '../models/user.dart';
 
 extension UserExt on Context {
-  Future<BotUser?> get user => UserMethods(supabase).getUserById(from!.id);
+  Future<BotUser?> get user async =>
+      middlewareStorage['user'] = await UserMethods(
+        supabase,
+      ).getUserById(from!.id);
 }

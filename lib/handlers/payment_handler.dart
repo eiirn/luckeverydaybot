@@ -67,6 +67,7 @@ Future<void> paymentHandler(Context ctx) async {
       userId: ctx.from!.id,
       name: username,
       langauge: ctx.from!.languageCode,
+      isPremium: ctx.from!.isPremium ?? false,
     );
     log('User created ${user.userId}!');
   }
