@@ -8,6 +8,7 @@ import 'package:supabase/supabase.dart';
 import 'package:televerse/televerse.dart';
 import 'package:televerse_shelf/televerse_shelf.dart';
 
+import 'api/manual_selection.dart';
 import 'utils/env_reader.dart';
 
 // Bot configuration
@@ -42,7 +43,7 @@ Router initBot() {
   }
   conv = Conversation(bot);
 
-  // Setup additional routes here
+  // Additional routes here
   router.get(
     '/',
     (req) => Response.ok(
@@ -50,5 +51,6 @@ Router initBot() {
       headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     ),
   );
+  router.get('/selectWinner', requestManualWinnerSelection);
   return router;
 }
