@@ -1,5 +1,6 @@
 import 'package:televerse/televerse.dart';
 
+import '../consts/consts.dart';
 import '../extensions/user_ext.dart';
 import '../language/en.dart';
 
@@ -9,5 +10,12 @@ Future<void> helpHandler(Context ctx) async {
   }
   final lang = (await ctx.user)?.lang ?? en;
 
-  await ctx.reply(lang.helpMessage, parseMode: ParseMode.markdown);
+  await ctx.reply(
+    lang.helpMessage,
+    parseMode: ParseMode.markdown,
+    replyMarkup: InlineKeyboard().addUrl(
+      lang.sourceCode,
+      CommonData.sourceCode,
+    ),
+  );
 }

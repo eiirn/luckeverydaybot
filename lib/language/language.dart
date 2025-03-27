@@ -277,4 +277,7 @@ abstract class Language {
 
   /// Only player, refund statement
   String get onlyOnePlayer;
+
+  /// Source Code Button Title
+  String get sourceCode;
 }

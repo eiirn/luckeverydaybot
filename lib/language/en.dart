@@ -453,6 +453,9 @@ By continuing to use this bot, you acknowledge that you have read, understood, a
 • Bot accepts star transactions from users and adds to bot's daily pool.
 • At 11:59 PM GMT, an automated algorithm randomly selects a winner and sends the prize pool worth of Telegram Gifts to them.
 
+*Fair Play Guarantee*
+Our bot's code is completely open source! Feel free to inspect the code anytime — transparency is our priority.
+
 *Game Rules:*
 • The prize pool consists of all user contributions minus 15% service fee.
 • Only one winner is selected per day.  
@@ -520,4 +523,7 @@ By continuing to use this bot, you acknowledge that you have read, understood, a
   @override
   String get onlyOnePlayer =>
       "Since you were the only participant in today's pool, we're refunding your entire contribution. Better luck finding competitors tomorrow!";
+
+  @override
+  String get sourceCode => 'Source Code';
 }

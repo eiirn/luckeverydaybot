@@ -40,6 +40,8 @@ class CommonData {
 
   static const introFileId =
       'AgACAgUAAxkDAAO2Z-RKOrQa5AlQibQDHhlEOPrswzEAAjzFMRtf1SFXKeFcwArZ2igBAAMCAAN5AAM2BA';
+
+  static const sourceCode = 'https://github.com/eiirn/luckeverydaybot';
 }
 
 class DebugGroup {
