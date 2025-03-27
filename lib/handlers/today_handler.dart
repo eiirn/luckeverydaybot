@@ -48,26 +48,21 @@ Future<void> todayHandler(Context ctx) async {
     // Exciting header
     messageBuilder.writeln(user.lang.todayTitle);
 
+    // Add countdown timer info
+    final now = DateTime.now().toUtc();
+    final todayDrawTime = DateTime.utc(now.year, now.month, now.day, 23, 59);
+    final targetDrawTime =
+        now.isAfter(todayDrawTime)
+            ? todayDrawTime.add(const Duration(days: 1))
+            : todayDrawTime;
+    final timeRemaining = targetDrawTime.difference(now);
+    final hoursRemaining = timeRemaining.inHours;
+    final minutesRemaining = timeRemaining.inMinutes % 60;
+
     // Handle empty pool case
     if (totalPool == 0 || participantCount == 0) {
       messageBuilder.writeln(user.lang.todayEmptyPool);
       messageBuilder.writeln(user.lang.todayEmptyPeople);
-      // Add countdown timer info
-      final now = DateTime.now().toUtc();
-      final todayDrawTime = DateTime.utc(
-        now.year,
-        now.month,
-        now.day,
-        23,
-        59,
-      ); // 23:59 UTC
-      final targetDrawTime =
-          now.isAfter(todayDrawTime)
-              ? todayDrawTime.add(const Duration(days: 1))
-              : todayDrawTime;
-      final timeRemaining = targetDrawTime.difference(now);
-      final hoursRemaining = timeRemaining.inHours;
-      final minutesRemaining = timeRemaining.inMinutes % 60;
 
       messageBuilder.writeln(
         user.lang.drawingInTime(hoursRemaining, minutesRemaining),
@@ -83,19 +78,6 @@ Future<void> todayHandler(Context ctx) async {
       // Show current pool size in a visually appealing way
       messageBuilder.writeln(user.lang.currentPrizePool(totalPool));
       messageBuilder.writeln(user.lang.participantCount(participantCount));
-
-      // Add countdown timer or deadline info
-      final now = DateTime.now().toUtc();
-      final drawTime = DateTime.utc(now.year, now.month, now.day, 12); // 12 UTC
-
-      // If current time is past today's draw time, use tomorrow's draw time
-      final targetDrawTime =
-          now.isAfter(drawTime)
-              ? drawTime.add(const Duration(days: 1))
-              : drawTime;
-
-      final hoursRemaining = targetDrawTime.difference(now).inHours;
-      final minutesRemaining = targetDrawTime.difference(now).inMinutes % 60;
 
       messageBuilder.writeln(
         user.lang.drawingInTime(hoursRemaining, minutesRemaining),
