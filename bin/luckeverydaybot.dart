@@ -17,6 +17,7 @@ import 'package:luckeverydaybot/handlers/settings/vip_status_handler.dart';
 import 'package:luckeverydaybot/handlers/settings_handler.dart';
 import 'package:luckeverydaybot/handlers/start_handler.dart';
 import 'package:luckeverydaybot/handlers/today_handler.dart';
+import 'package:luckeverydaybot/language/language.dart';
 import 'package:luckeverydaybot/luckeverydaybot.dart';
 import 'package:luckeverydaybot/middlewares/user_handling.dart';
 import 'package:luckeverydaybot/scheduled/task.dart';
@@ -61,6 +62,10 @@ void main(List<String> args) async {
   bot.hears(CommonData.oneTo2500Exp, invoiceSender);
   bot.onError(handleError);
   bot.command('invite', inviteHandler);
+
+  for (final lang in Language.availableLanguages()) {
+    bot.text(lang.customAmount, customAmountHandler);
+  }
 
   final pipeline = const Pipeline()
       .addMiddleware(logRequests())
