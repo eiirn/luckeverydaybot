@@ -183,7 +183,7 @@ class Russian extends Language {
 
   @override
   String get improveChances =>
-      'Хотите улучшить свои шансы? Отправьте больше звезд с помощью /join!';
+      'Хотите улучшить свои шансы? Отправьте больше звезд с помощью /join';
 
   @override
   String get notJoinedToday =>

@@ -183,7 +183,7 @@ Send your first star payment to join today's draw! Good luck! ✨''';
 
   @override
   String get improveChances =>
-      'Want to improve your chances? Send more stars with /join!';
+      'Want to improve your chances? Send more stars with /join';
 
   @override
   String get notJoinedToday => '*You haven\'t joined today\'s draw yet!*';
