@@ -90,6 +90,6 @@ Future<void> activateVIPStatusHandler(Context ctx) async {
     description: lang.vipInvoiceDescription(user.referredBy != null),
     payload: PayloadData.vipPayload,
     currency: CommonData.currency,
-    prices: [LabeledPrice(label: lang.vipInvoiceLabel, amount: 10)],
+    prices: [LabeledPrice(label: lang.vipInvoiceLabel, amount: 399)],
   );
 }
