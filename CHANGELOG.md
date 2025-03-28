@@ -1,3 +1,7 @@
+# 1.0.4
+
+- VIP Status price corrected to 399
+
 # 1.0.3
 
 - Sending gifts
