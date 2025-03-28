@@ -161,6 +161,23 @@ class WinnerSelector {
         name: 'Gifts for Winner',
       );
 
+      // Send the gifts!
+      for (final gift in optimal.gifts) {
+        try {
+          await api.sendGift(
+            giftId: gift.id,
+            userId: winner.userId,
+            text: 'Reward for winning the Lucky Draw! 🎉',
+          );
+        } catch (err, stack) {
+          BotLogger.log(
+            'Error sending gift to Winner (${winner.userId})!\n\n```${gift.toJson()}```',
+            error: err,
+            stackTrace: stack,
+          ).ignore();
+        }
+      }
+
       // 11. Add any unused stars to the user's balance
       if (optimal.unusedStars > 0) {
         await updateUserBalance(
