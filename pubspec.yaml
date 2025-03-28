@@ -1,6 +1,6 @@
 name: luckeverydaybot
 description: A simple telegram bot for placing casino like bets.
-version: 1.0.2+dev
+version: 1.0.3
 
 environment:
   sdk: ^3.7.2

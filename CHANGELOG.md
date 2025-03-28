@@ -1,3 +1,9 @@
+# 1.0.3
+
+- Sending gifts
+- Add Custom Amount text handler
+- Fix /join! 
+
 # 1.0.2+dev
 
 - Fix [#11](https://github.com/eiirn/luckeverydaybot/issues/11)
