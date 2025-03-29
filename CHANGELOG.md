@@ -1,3 +1,8 @@
+# 1.0.5
+
+- Update announcement texts
+- Add better luck next time notifications
+
 # 1.0.4
 
 - VIP Status price corrected to 399
