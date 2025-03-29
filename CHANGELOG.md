@@ -1,3 +1,7 @@
+# 1.0.6
+
+- Bot will now announce in Channel if the draw was skipped due to single player, or no player at all.
+
 # 1.0.5
 
 - Update announcement texts
