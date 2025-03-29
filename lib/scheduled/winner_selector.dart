@@ -110,7 +110,12 @@ class WinnerSelector {
         await api.sendDice(channel, emoji: DiceEmoji.slotMachine);
         await api.sendMessage(
           channel,
-          "🎉 *WINNER ANNOUNCEMENT* 🎉\n\n🏆 Congratulations to *${winner.name}* ${winner.isVip ? '🎖️ ' : ''}for winning today's lucky draw!\n\n🦄 Winner ID: ${winner.userId}\n💰 Prize: *$prizeAmount stars*\n📊 Total pool: *$totalPool stars*\n\nThe more stars you contribute, the higher your chances to win. Will YOU be our next lucky winner? 🍀",
+          '🎉 *WINNER ANNOUNCEMENT* 🎉\n\n🏆 '
+          "Congratulations to *${winner.name}* ${winner.isVip ? '🎖️ ' : ''}for winning today's lucky draw!\n\n"
+          '🦄 Winner ID: ${winner.userId}\n'
+          '💰 Total pool: *$totalPool* ⭐️\n\n'
+          'The more stars you contribute, the higher your chances to win. '
+          'Will YOU be our next lucky winner? 🍀',
           replyMarkup: InlineKeyboard().addUrl(
             'Join next round',
             'https://t.me/TheCashSplashBot',
@@ -129,15 +134,29 @@ class WinnerSelector {
           if (hasBeenReferred) {
             await api.sendMessage(
               ChatID(winner.userId),
-              "🎊 *Congratulations!* You've WON today's Lucky Draw!\n\n💰 Your prize: *$winning stars* has been credited to your account.\n\n📝 Note: 5% (${(prizeAmount * 0.05).round()} stars) of your total win was shared with your referrer as commission.\n\n⭐ Want to keep 100% of your winnings? Upgrade to VIP status to eliminate referral commissions on future wins!",
+              "🎊 *Congratulations!* You've WON today's Lucky Draw!\n\n💰 "
+              'Your prize: *$winning* ⭐️ has been credited to your account.\n\n'
+              '📝 Note: 5% (${(prizeAmount * 0.05).round()} stars) '
+              'of your total win was shared with your referrer as commission.\n\n'
+              '⭐ Want to keep 100% of your winnings? '
+              'Upgrade to VIP status to eliminate referral commissions on future wins!',
               parseMode: ParseMode.markdown,
             );
           }
         } else {
-          await api.sendMessage(
-            ChatID(winner.userId),
-            "🎊 *Congratulations!* You've WON today's Lucky Draw!\n\n💰 Your prize: *$prizeAmount stars* worth of gifts are coming on the way!\n\nKeep participating daily for more chances to win big! 🍀",
+          final winnerChat = ChatID(winner.userId);
+          final msg = await api.sendMessage(
+            winnerChat,
+            "🎊 *Congratulations!* You've WON today's Lucky Draw!\n\n💰 "
+            'Your prize: *$prizeAmount stars* worth of gifts are coming on '
+            'the way!\n\nKeep participating daily for more chances to win big! 🍀',
             parseMode: ParseMode.markdown,
+          );
+          await api.setMessageReaction(
+            winnerChat,
+            msg.messageId,
+            reaction: [const ReactionType.emoji(emoji: '🎉')],
+            isBig: true,
           );
         }
       } catch (err, stack) {
