@@ -75,6 +75,19 @@ class WinnerSelector {
 
       if (participants.isEmpty) {
         log('⚠️ Failed to fetch participant data. Skipping winner selection.');
+        const channel = ChatID(CommonData.channelId);
+        await api.sendMessage(
+          channel,
+          'ℹ️ *Lucky Draw Update*\n\n'
+          'There were no participants in today\'s pool. '
+          'As a result, the draw has been skipped. \n\n'
+          'We hope to see more people joining in the next round! 🍀',
+          replyMarkup: InlineKeyboard().addUrl(
+            'Join next round',
+            'https://t.me/TheCashSplashBot',
+          ),
+          parseMode: ParseMode.markdown,
+        );
         return;
       }
 
@@ -271,6 +284,15 @@ class WinnerSelector {
       }
     } catch (e, stacktrace) {
       if (e is OnlyParticipantException) {
+        const channel = ChatID(CommonData.channelId);
+        await api.sendMessage(
+          channel,
+          'ℹ️ *Lucky Draw Update*\n\n'
+          'There was only one participant in today\'s pool. '
+          'As per our policy, the draw has been skipped and the entry fee has been refunded. '
+          'Thank you for participating, and we hope to see more players in the next round! 🍀',
+          parseMode: ParseMode.markdown,
+        );
         BotLogger.log(
           '✅ There was only one player in the pool. So we refuneded.',
         ).ignore();
