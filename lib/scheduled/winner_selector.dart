@@ -218,7 +218,9 @@ class WinnerSelector {
         try {
           await api.sendMessage(
             ChatID(winner.referredBy!),
-            "🎉 *Referral Bonus!* 🎉\n\nYou just received *$commissionAmount stars* as commission because someone you invited won today's lucky draw! Keep inviting friends to earn more commissions.",
+            '🎉 *Referral Bonus!* 🎉\n\nYou just received *$commissionAmount '
+            "stars* as commission because someone you invited won today's "
+            'lucky draw! Keep inviting friends to earn more commissions.',
             parseMode: ParseMode.markdown,
           );
         } catch (e, stack) {
@@ -228,6 +230,25 @@ class WinnerSelector {
             stackTrace: stack,
           ).ignore();
         }
+      }
+
+      // Notify every eligible participants that results are just came in.
+      for (var i = 0; i < participants.length; i++) {
+        final participant = participants[i];
+        if (participant.userId == winner.userId) {
+          continue;
+        }
+        try {
+          await api.sendMessage(
+            ChatID(participant.userId),
+            participant.lang.resultsAreIn(totalPool),
+            replyMarkup: InlineKeyboard().addUrl(
+              participant.lang.checkWinnerTitle,
+              CommonData.channel,
+            ),
+          );
+          await Future.delayed(const Duration(seconds: 10));
+        } catch (_) {}
       }
     } catch (e, stacktrace) {
       if (e is OnlyParticipantException) {

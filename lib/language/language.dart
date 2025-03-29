@@ -280,4 +280,10 @@ abstract class Language {
 
   /// Source Code Button Title
   String get sourceCode;
+
+  /// Notification to the participant that result came in
+  String resultsAreIn(int prizePool);
+
+  /// Check winner button title
+  String get checkWinnerTitle;
 }

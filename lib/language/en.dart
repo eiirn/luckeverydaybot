@@ -526,4 +526,13 @@ Our bot's code is completely open source! Feel free to inspect the code anytime 
 
   @override
   String get sourceCode => 'Source Code';
+
+  @override
+  String resultsAreIn(int prizePool) =>
+      'No luck today! 🎰 The prize pool hit $prizePool stars! 🤩 But don’t '
+      'worry—tomorrow’s another shot! The more stars you add, the better your '
+      'chances. 🌟 See you in the next draw. Good luck! ✨';
+
+  @override
+  String get checkWinnerTitle => 'Who won today?';
 }
